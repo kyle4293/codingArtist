@@ -1,35 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    <title>CodingArtist</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+
 </head>
+
+
 <style>
+    .post {
+        margin: 20px 150px 10px auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mb-3 {
+        margin-left: 150px
+    }
+
+    .table-responsive {
+        margin: 50px 150px 30px 150px;
+    }
+
     
 </style>
+
 <body>
-    
+    <header class="p-3 border-bottom">
+        <div id="header" class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                    <img src="img/codingArtistLogo.png" width="150px">
+                </a>
+
+                <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+                    <li><a href="#" class="nav-link px-2 link-dark">Inside</a></li>
+                    <li><a href="#" class="nav-link px-2 link-dark">Contact</a></li>
+                </ul>
+            </div>
+    </header>
+
     <div class="container px-4 py-5">
-        <h2 class="pb-2 border-bottom">Features with title</h2>
+        <h2 class="pb-2 border-bottom">아티스트 자세히 알아보기</h2>
 
         <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
             <div class="col d-flex flex-column align-items-start gap-2">
-                <h2 class="fw-bold text-body-emphasis">아무말</h2>
-                <!-- <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading. We'll add
-                    onto it with another sentence and probably just keep going until we run out of words.</p> -->
-                    <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg" class="img-thumbnail" alt="...">
+                <h2 class="fw-bold text-body-emphasis">아티스트 : 이현구</h2>
+                <p class="text-body-secondary">안녕하세요 아티스트 이현구 라고 합니다. 제 얘기를 들려드릴게요!</p>
+                <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
+                    class="img-thumbnail" alt="...">
                 <!-- <a href="#" class="btn btn-primary btn-lg">Primary button</a> -->
             </div>
 
             <div class="col">
-                <div class="row row-cols-1 row-cols-sm-2 g-4">
+                <div class="row row-cols-1 row-row-sm-2 g-3">
                     <div class="col d-flex flex-column gap-2">
                         <div
                             class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
@@ -37,8 +74,8 @@
                                 <use xlink:href="#collection"></use>
                             </svg>
                         </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">Featured title</h4>
-                        <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+                        <h4 class="fw-semibold mb-0 text-body-emphasis">주제1</h4>
+                        <p class="text-body-secondary">간단설명.</p>
                     </div>
 
                     <div class="col d-flex flex-column gap-2">
@@ -48,8 +85,8 @@
                                 <use xlink:href="#gear-fill"></use>
                             </svg>
                         </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">Featured title</h4>
-                        <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+                        <h4 class="fw-semibold mb-0 text-body-emphasis">주제2</h4>
+                        <p class="text-body-secondary">간단설명.</p>
                     </div>
 
                     <div class="col d-flex flex-column gap-2">
@@ -59,8 +96,8 @@
                                 <use xlink:href="#speedometer"></use>
                             </svg>
                         </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">Featured title</h4>
-                        <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+                        <h4 class="fw-semibold mb-0 text-body-emphasis">주제3</h4>
+                        <p class="text-body-secondary">간단설명.</p>
                     </div>
 
                     <div class="col d-flex flex-column gap-2">
@@ -70,8 +107,8 @@
                                 <use xlink:href="#table"></use>
                             </svg>
                         </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">Featured title</h4>
-                        <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+                        <!-- <h4 class="fw-semibold mb-0 text-body-emphasis">Featured title</h4>
+                        <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p> -->
                     </div>
                 </div>
             </div>
@@ -79,68 +116,237 @@
     </div>
 
     <main>
-      
+
         <!-- Marketing messaging and featurettes
         ================================================== -->
         <!-- Wrap the rest of the page in another container to center all the content. -->
-      
+
         <div class="container marketing">
-          <!-- START THE FEATURETTES -->
-      
-          <hr class="featurette-divider">
-      
-          <div class="row featurette">
-            <div class="col-md-7">
-              <h2 class="featurette-heading fw-normal lh-1">First featurette heading. <span class="text-body-secondary">It’ll blow your mind.</span></h2>
-              <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.</p>
-            </div>
-            <div class="col-md-5">
-                <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg" class="img-thumbnail" alt="...">
-              <!-- <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg>
+            <!-- START THE FEATURETTES -->
+
+            <hr class="featurette-divider">
+
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading fw-normal lh-1">주제1 대제목 <span
+                            class="text-body-secondary"></span></h2>
+                    <p class="lead">주제2 부연설명</p>
+                </div>
+                <div class="col-md-5">
+                    <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
+                        class="img-thumbnail" alt="...">
+                    <!-- <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg>
              -->
+                </div>
             </div>
-          </div>
-      
-          <hr class="featurette-divider">
-      
-          <div class="row featurette">
-            <div class="col-md-7 order-md-2">
-              <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span class="text-body-secondary">See for yourself.</span></h2>
-              <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this layout would work with some actual real-world content in place.</p>
+
+            <hr class="featurette-divider">
+
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="featurette-heading fw-normal lh-1">주제2 대제목 <span
+                            class="text-body-secondary"></span></h2>
+                    <p class="lead">주제2 부연설명</p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
+                        class="img-thumbnail" alt="...">
+
+                </div>
             </div>
-            <div class="col-md-5 order-md-1">
-                <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg" class="img-thumbnail" alt="...">
-              <!-- <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg> -->
+
+            <hr class="featurette-divider">
+
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading fw-normal lh-1">주제3 대제목 <span
+                            class="text-body-secondary"></span></h2>
+                    <p class="lead">주제3 부연설명</p>
+                </div>
+                <div class="col-md-5">
+                    <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
+                        class="img-thumbnail" alt="...">
+
+                </div>
             </div>
-          </div>
-      
-          <hr class="featurette-divider">
-          
-          <div class="row featurette">
-            <div class="col-md-7">
-              <h2 class="featurette-heading fw-normal lh-1">And lastly, this one. <span class="text-body-secondary">Checkmate.</span></h2>
-              <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really intended to be actually read, simply here to give you a better view of what this would look like with some actual content. Your content.</p>
-            </div>
-            <div class="col-md-5">
-                <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg" class="img-thumbnail" alt="...">
-              <!-- <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg> -->
-            </div>
-          </div>
-      
-          <hr class="featurette-divider">
-      
-          <!-- /END THE FEATURETTES -->
-      
+
+            <!-- <hr class="featurette-divider"> -->
+
+            <!-- /END THE FEATURETTES -->
+
         </div><!-- /.container -->
-      
-      
-        <!-- FOOTER -->
-        <footer class="container">
-          <p class="float-end"><a href="#">Back to top</a></p>
-          <p>© 2017–2023 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
-        </footer>
-      </main>
-      
+
+    </main>
+
+    <hr class="my-4">
+    <h2 class="mb-3">방명록</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th width=100px>번호</th>
+                    <th width=1000px>내용</th>
+                    <th width=100px>작성자</th>
+                    <th width=300px>등록시간</th>
+                    <!-- <th scope="col">Header</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+                <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,001</td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="post">
+        <div class="input-group mb-3">
+            <span class="input-group-text">방명록</span>
+            <input type="text" class="form-control" placeholder="방명록을 작성해주세요" aria-label="Username">
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-outline-primary" type="button" id="button-addon2">작성완료</button>
+          </div>
+    </div>
+    <!-- <div class="gb">
+        <div class="col-md-6">
+            <label for="cc-number" class="form-label">방명록을 작성해주세요</label>
+            <input type="text" class="form-control" id="cc-number" placeholder="" required="" data-siid="si_input_9">
+            <div class="invalid-feedback">
+                Credit card number is required
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label for="cc-cvv" class="form-label">비밀번호</label>
+            <input type="text" class="form-control" id="cc-cvv" placeholder="" required="" data-siid="si_input_11">
+            <div class="invalid-feedback">
+                Security code required
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary">방명록 작성</button>
+    </div>
+    <small class="text-body-secondary">비밀번호는 숫자 네자리로 설정해주세요</small> -->
+
+    <!-- Footer-->
+    <footer class="footer py-4">
+        <div id="footer" class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-lg-start">Copyright &copy; CodingArtist 2023</div>
+                <div class="col-lg-4 my-3 my-lg-0">
+                    <a class="btn" href="https://github.com/kyle4293/codingArtist">
+                        <img src="img/github.png" width="30px">
+                        <i>github</i></a>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="link-dark text-decoration-none me-3" href="http://www.spartacodingclub.kr/"><i>Sparta
+                            Coding Club</i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </body>
 
 </html>
