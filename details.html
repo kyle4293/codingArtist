@@ -61,7 +61,7 @@
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
         import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        
+
 
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
@@ -79,6 +79,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+
         $("#submit").click(async function () {
             let content = $('#content').val();
             let pwd = $('#pwd').val();
@@ -90,10 +91,12 @@
                 'pwd': pwd,
                 'date': date.toLocaleString(),
                 'name': name
+
             };
             await addDoc(collection(db, "guestbook"), doc);
             alert('저장 완료!');
             window.location.reload();
+
 
             // console.log(doc['content']);
             // console.log(doc['pwd']);
@@ -131,6 +134,7 @@
             $('#mycomment').append(temp_html);
         });
             $('#cnt').append(`<h6 class="border-bottom my-3 py-2">${ cnt }개의 글이 있습니다.</h5>`);
+
     </script>
 </head>
 
@@ -305,6 +309,7 @@
 
 
 
+
     <!-- Comments-->
     <!-- 댓글 -->
     <div class="comments m-4 p-4">
@@ -318,6 +323,7 @@
             <hr>
             <div id="mycomment">
                 
+
             </div>
     </div>
     </div>
