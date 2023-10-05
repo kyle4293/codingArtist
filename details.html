@@ -18,14 +18,6 @@
 
 
 <style>
-    .post {
-        margin: 20px 150px 10px auto;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-
     .mb-3 {
         margin-left: 150px
     }
@@ -34,7 +26,29 @@
         margin: 50px 150px 30px 150px;
     }
 
-    
+    .comment {
+        margin: 10px 300px 10px 300px;
+        font-size: 25px;
+    }
+
+    textarea {
+        height: 300px;
+
+    }
+
+    .pwd{
+        align-items:end;
+        margin: 0 450px 0 700px;
+    }
+
+    .pb-2 {
+        font-size: 50px;
+    }
+
+    .img-thumbnail_1 {
+        width: 180px;
+        height: 300px;
+    }
 </style>
 
 <body>
@@ -60,8 +74,9 @@
             <div class="col d-flex flex-column align-items-start gap-2">
                 <h2 class="fw-bold text-body-emphasis">아티스트 : 이현구</h2>
                 <p class="text-body-secondary">안녕하세요 아티스트 이현구 라고 합니다. 제 얘기를 들려드릴게요!</p>
-                <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
-                    class="img-thumbnail" alt="...">
+
+                <img src="img/이현구.jpg" class="img-thumbnail_1" alt="...">
+
                 <!-- <a href="#" class="btn btn-primary btn-lg">Primary button</a> -->
             </div>
 
@@ -128,8 +143,7 @@
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading fw-normal lh-1">주제1 대제목 <span
-                            class="text-body-secondary"></span></h2>
+                    <h2 class="featurette-heading fw-normal lh-1">주제1 대제목 <span class="text-body-secondary"></span></h2>
                     <p class="lead">주제2 부연설명</p>
                 </div>
                 <div class="col-md-5">
@@ -144,8 +158,7 @@
 
             <div class="row featurette">
                 <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading fw-normal lh-1">주제2 대제목 <span
-                            class="text-body-secondary"></span></h2>
+                    <h2 class="featurette-heading fw-normal lh-1">주제2 대제목 <span class="text-body-secondary"></span></h2>
                     <p class="lead">주제2 부연설명</p>
                 </div>
                 <div class="col-md-5 order-md-1">
@@ -159,8 +172,7 @@
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading fw-normal lh-1">주제3 대제목 <span
-                            class="text-body-secondary"></span></h2>
+                    <h2 class="featurette-heading fw-normal lh-1">주제3 대제목 <span class="text-body-secondary"></span></h2>
                     <p class="lead">주제3 부연설명</p>
                 </div>
                 <div class="col-md-5">
@@ -177,6 +189,50 @@
         </div><!-- /.container -->
 
     </main>
+
+    <section class="page-section bg-light" id="team">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Contact</h2>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="my-5 col-lg-4">
+                    <div class="team-member">
+                        <div class="mx-auto">
+                            <img class="mx-auto" src="img/email.png" alt="..." width="50px;">
+                            <h4>Email</h4>
+                            <a class="text-muted pt-3">cchs33@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-5 col-lg-4">
+                    <div class="team-member">
+                        <a href="https://www.instagram.com/cchs33/"><img class="mx-auto" src="img/instagram.png"
+                                alt="..." width="50px;"></a>
+                        <h4>Instagram</h4>
+                        <a class="text-muted pt-3" href="https://www.instagram.com/cchs33/"><i>
+                                @cchs33</i></a>
+                    </div>
+                </div>
+                <div class="my-5 col-lg-4">
+                    <div class="team-member">
+                        <a href="https://github.com/kyle4293"><img class="mx-auto" src="img/github.png" alt="..."
+                                width="50px;"></a>
+                        <h4>GitHub</h4>
+                        <a class="text-muted pt-3" href="https://github.com/Sk1palong"><i>Sk1palong</i></a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="my-5 row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <p class="large text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque,
+                        laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <hr class="my-4">
     <h2 class="mb-3">방명록</h2>
@@ -300,34 +356,24 @@
             </tbody>
         </table>
     </div>
-    <div class="post">
-        <div class="input-group mb-3">
-            <span class="input-group-text">방명록</span>
-            <input type="text" class="form-control" placeholder="방명록을 작성해주세요" aria-label="Username">
+    <div class="comment">
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">방명록 작성</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button class="btn btn-outline-primary" type="button" id="button-addon2">작성완료</button>
-          </div>
     </div>
-    <!-- <div class="gb">
-        <div class="col-md-6">
-            <label for="cc-number" class="form-label">방명록을 작성해주세요</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required="" data-siid="si_input_9">
-            <div class="invalid-feedback">
-                Credit card number is required
-            </div>
+    <div class="pwd">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username"
+                aria-describedby="button-addon2">
+            <button class="btn btn-primary" type="button" id="button-addon2">작성완료</button>
         </div>
-        <div class="col-md-3">
-            <label for="cc-cvv" class="form-label">비밀번호</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="" required="" data-siid="si_input_11">
-            <div class="invalid-feedback">
-                Security code required
-            </div>
-        </div>
-        <button type="button" class="btn btn-primary">방명록 작성</button>
     </div>
-    <small class="text-body-secondary">비밀번호는 숫자 네자리로 설정해주세요</small> -->
+
+
+
+
+
 
     <!-- Footer-->
     <footer class="footer py-4">
