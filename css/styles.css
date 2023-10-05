@@ -61,6 +61,22 @@ div.masthead .masthead-heading {
         margin-bottom: 4rem;
     }
 
+    div.comments input[type="text"] {
+        width: 200px;
+        margin-top: 10px;
+        float: right;
+    }
+
+    div.comments #submit {
+        float:right;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    hr {
+        clear:right;
+    }
+
     .footer {
         background-color: #b8c5dc;
         color: rgb(65, 61, 61);
