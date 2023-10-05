@@ -13,51 +13,114 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .table-responsive {
+            margin: 50px 150px 30px 150px;
+        }
 
+        textarea {
+            height: 300px;
+
+        }
+
+        .pb-2 {
+            font-size: 50px;
+        }
+
+        .img-thumbnail_1 {
+            width: 180px;
+            height: 300px;
+        }
+
+        .img-thumbnail {
+            width: 376px;
+            height: 376px;
+        }
+
+        .mypostingbox {
+
+            width: 600px;
+            margin: 30px auto 30px auto;
+            padding: 20px;
+            box-shadow: 0px 0px 3px 0px blue;
+            border-radius: 5px;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <script type="module">
+        // Firebase SDK 라이브러리 가져오기
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvFpgx2vL0ivDQvrPrGwysXB4aWTXaPL0",
+            authDomain: "sparta-1730c.firebaseapp.com",
+            projectId: "sparta-1730c",
+            storageBucket: "sparta-1730c.appspot.com",
+            messagingSenderId: "347762079276",
+            appId: "1:347762079276:web:f810e63af91fcaaa23c389",
+            measurementId: "G-SJ8YR6BE0H"
+        };
+
+
+        // Firebase 인스턴스 초기화
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        $("#postingbtn").click(async function () {
+            let content = $('#content').val();
+            let pwd = $('#pwd').val();
+            let date = new Date();
+            
+            let doc = {
+                'content': content,
+                'pwd': pwd,
+                'date' : date.toLocaleString()
+            };
+            await addDoc(collection(db, "guestbook"), doc);
+            alert('저장 완료!');
+            window.location.reload();
+
+            console.log(doc['content']);
+            console.log(doc['pwd']);
+            console.log(doc['date']);
+
+            //수정,삭제,작성자 기능구현하는법 알아오기
+        })
+
+        let docs = await getDocs(collection(db, "guestbook"));
+        docs.forEach((doc) => {
+            let row = doc.data();
+
+            let pwd = row['pwd'];
+            let content = row['content'];
+            let date = row['date'];
+
+            let temp_html = `
+            <tr>
+                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>${content}</td>
+                    <td height=50px valign=middle>1,003</td>
+                    <td height=50px valign=middle>${date}</td>
+
+                </tr>`;
+            $('#table').append(temp_html);
+        });
+
+    </script>
 </head>
-
-
-<style>
-    
-    .table-responsive {
-        margin: 50px 150px 30px 150px;
-    }
-
-    textarea {
-        height: 300px;
-
-    }
-
-    .pb-2 {
-        font-size: 50px;
-    }
-
-    .img-thumbnail_1 {
-        width: 180px;
-        height: 300px;
-    }
-
-    .img-thumbnail {
-        width: 376px;
-        height: 376px;
-    }
-
-    .mypostingbox {
-
-        width: 600px;
-        margin: 30px auto 30px auto;
-        padding: 20px;
-        box-shadow: 0px 0px 3px 0px blue;
-        border-radius: 5px;
-    }
-
-    .title {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-</style>
 
 <body>
     <!-- 헤더 -->
@@ -242,12 +305,12 @@
                     <!-- <th scope="col">Header</th> -->
                 </tr>
             </thead>
-            <tbody>
+            <tbody id = "table">
                 <tr>
                     <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
+                    <td height=50px valign=middle>1,002</td>
+                    <td height=50px valign=middle>1,003</td>
+                    <td height=50px valign=middle>1,004</td>
 
                 </tr>
                 <tr>
@@ -355,14 +418,14 @@
         <div class="comment">
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">방명록 작성</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea id="content" class="form-control" rows="3"></textarea>
             </div>
         </div>
         <div class="pwd">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username"
+                <input id="pwd" type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username"
                     aria-describedby="button-addon2">
-                <button class="btn btn-primary" type="button" id="button-addon2">작성완료</button>
+                <button class="btn btn-primary" type="button" id="postingbtn">작성완료</button>
             </div>
         </div>
     </div>
