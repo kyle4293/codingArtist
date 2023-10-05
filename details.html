@@ -61,7 +61,7 @@
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
         import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
+        
 
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
@@ -79,46 +79,58 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        $("#postingbtn").click(async function () {
+        $("#submit").click(async function () {
             let content = $('#content').val();
             let pwd = $('#pwd').val();
             let date = new Date();
-            
+            let name = $('#name').val();
+
             let doc = {
                 'content': content,
                 'pwd': pwd,
-                'date' : date.toLocaleString()
+                'date': date.toLocaleString(),
+                'name': name
             };
             await addDoc(collection(db, "guestbook"), doc);
             alert('저장 완료!');
             window.location.reload();
 
-            console.log(doc['content']);
-            console.log(doc['pwd']);
-            console.log(doc['date']);
+            // console.log(doc['content']);
+            // console.log(doc['pwd']);
+            // console.log(doc['date']);
+            // console.log(doc['name']);
 
             //수정,삭제,작성자 기능구현하는법 알아오기
         })
-
+            let cnt =0;
         let docs = await getDocs(collection(db, "guestbook"));
         docs.forEach((doc) => {
             let row = doc.data();
-
+            cnt++;
             let pwd = row['pwd'];
             let content = row['content'];
             let date = row['date'];
+            let name = row['name'];
 
             let temp_html = `
-            <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>${content}</td>
-                    <td height=50px valign=middle>1,003</td>
-                    <td height=50px valign=middle>${date}</td>
-
-                </tr>`;
-            $('#table').append(temp_html);
+            <div class="card my-4">
+            <div class="card-body">
+                <div class="card-text">${content}</div>
+                <div class="d-flex justify-content-end">
+                    <div class="badge bg-light text-dark p-2 text-start">
+                        <div class="mb-2">${name}</div>
+                        <div>${date}</div>
+                        <div class="my-3">
+                                <button id="update" type="button" class="btn btn-outline-secondary">수정</button>
+                                <button id="delete" type="button" class="btn btn-outline-secondary">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            $('#mycomment').append(temp_html);
         });
-
+            $('#cnt').append(`<h6 class="border-bottom my-3 py-2">${ cnt }개의 글이 있습니다.</h5>`);
     </script>
 </head>
 
@@ -291,144 +303,29 @@
         </div>
     </section>
 
-    <!-- 방명록 -->
-    <hr class="my-4">
-    <h2 class="title">방명록</h2>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
-                <tr>
-                    <th width=100px>번호</th>
-                    <th width=1000px>내용</th>
-                    <th width=100px>작성자</th>
-                    <th width=300px>등록시간</th>
-                    <!-- <th scope="col">Header</th> -->
-                </tr>
-            </thead>
-            <tbody id = "table">
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,002</td>
-                    <td height=50px valign=middle>1,003</td>
-                    <td height=50px valign=middle>1,004</td>
 
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
 
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-                <tr>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-                    <td height=50px valign=middle>1,001</td>
-
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="mypostingbox">
-        <div class="comment">
-            <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">방명록 작성</label>
-                <textarea id="content" class="form-control" rows="3"></textarea>
+    <!-- Comments-->
+    <!-- 댓글 -->
+    <div class="comments m-4 p-4">
+        <h4 id ="cnt">방명록</h4>
+            <form class="my-4">
+                <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
+                <input id="submit" type="button" value="방명록 작성" class="btn btn-primary">
+                <input id="pwd" type="text" class="form-control" placeholder="password" aria-label="Server">
+                <input id="name" type="text" class="form-control" placeholder="Username" aria-label="Username">
+            </form>
+            <hr>
+            <div id="mycomment">
+                
             </div>
-        </div>
-        <div class="pwd">
-            <div class="input-group mb-3">
-                <input id="pwd" type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username"
-                    aria-describedby="button-addon2">
-                <button class="btn btn-primary" type="button" id="postingbtn">작성완료</button>
-            </div>
-        </div>
     </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
 
     <!-- Footer-->
     <footer class="footer py-4">
