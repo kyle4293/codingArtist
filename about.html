@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CodingArtist TeamIntro</title>
+  <title>CodingArtist</title>
 
   <link rel="stylesheet" href="css/styles.css">
 
@@ -17,8 +17,7 @@
 
   <style>
     .teamTitle {
-      width: 550px;
-      color: cadetblue;
+      width: 580px;
       margin: 50px auto 50px auto;
     }
 
@@ -44,13 +43,10 @@
       border-radius: 10px;
     }
 
-    div {
-      text-align: center;
-    }
-
     .rules {
       width: 400px;
-      margin: 0px auto 0px auto;
+      margin: 20px auto 0px auto;
+      text-align: center;
       display: none;
     }
 
@@ -61,14 +57,14 @@
     .goal {
       width: 550px;
       height: 60px;
-      margin: auto;
-      border: 1px solid black;
-      border-radius: 10px;
+      margin: 20px auto 0px auto;
+      text-align: center;
       display: none;
     }
 
     .membersBtn {
       margin: 50px auto 60px auto;
+      text-align: center;
     }
 
     .btn-outline-secondary {
@@ -77,10 +73,14 @@
     }
     
     .goalFrame {
-      margin: 0px auto 30px auto;
+      margin: 20px auto 30px auto;
     }
     .ruleFrame{
-      margin: 0px auto 0px auto;
+      margin: 20px auto 0px auto;
+    }
+    h2:not(.introTitle){
+      cursor: pointer;
+      text-align: center;
     }
   </style>
 
@@ -90,32 +90,40 @@
     const regex = /[0-9`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gim;
 
     $('#goalTitle').click(async function () {
-      if(!admissive) {
-          const teamName = prompt('저희 팀의 이름을 입력해주세요'). replace(regex, "").toLowerCase();
-          if(teamName.includes('코딩아티스트') || teamName.includes('codingartist')) {
-            $('#goal').toggle();
-            admissive = true;
-          } else {
-            alert("틀렸습니다.");
-          }
-      } else {
-        $('#goal').toggle();
-      }
-    });
+      $('#goal').toggle();
+    })
 
     $('#ruleTitle').click(async function () {
-      if(!admissive) {
-          const teamName = prompt('저희 팀의 이름을 입력해주세요'). replace(regex, "").toLowerCase();
-          if(teamName.includes('코딩아티스트') || teamName.includes('codingartist')) {
-            $('#rules').toggle();
-            admissive = true;
-          } else {
-            alert("틀렸습니다.");
-          }
-      } else {
-        $('#rules').toggle();
-      }
-    });
+      $('#rules').toggle();
+    })
+
+    // $('#goalTitle').click(async function () {
+    //   if(!admissive) {
+    //       const teamName = prompt('저희 팀의 이름을 입력해주세요'). replace(regex, "").toLowerCase();
+    //       if(teamName.includes('코딩아티스트') || teamName.includes('codingartist')) {
+    //         $('#goal').toggle();
+    //         admissive = true;
+    //       } else {
+    //         alert("틀렸습니다.");
+    //       }
+    //   } else {
+    //     $('#goal').toggle();
+    //   }
+    // });
+
+    // $('#ruleTitle').click(async function () {
+    //   if(!admissive) {
+    //       const teamName = prompt('저희 팀의 이름을 입력해주세요'). replace(regex, "").toLowerCase();
+    //       if(teamName.includes('코딩아티스트') || teamName.includes('codingartist')) {
+    //         $('#rules').toggle();
+    //         admissive = true;
+    //       } else {
+    //         alert("틀렸습니다.");
+    //       }
+    //   } else {
+    //     $('#rules').toggle();
+    //   }
+    // });
   </script>
 
 </head>
@@ -139,7 +147,7 @@
 
   <!-- Masthead-->
   <div class="teamTitle">
-    <h1>코딩 아티스트팀을 소개합니다</h1>
+    <h1>코딩 아티스트 팀을 소개합니다</h1>
   </div>
 
   <div>
@@ -147,12 +155,14 @@
       <tbody>
         <td class="teamImage">
           <img class="image"
-            src="https://cdn.pixabay.com/photo/2023/03/12/21/05/egg-7847875_1280.png">
+            src="./img/about.png">
         </td>
         <td class="intro">
-          <h2>팀 소개</h2>
-          <p>저희는 코딩을 예술적으로 할 수 있도록 성장하길<br>
-            원하는 사람들이 모인 팀입니다.</p>
+          <h2 class="introTitle">팀 소개</h2>
+          <p>저희는 코딩을 예술적으로 잘할 수 있게<br>
+            성장하고 싶은 사람들이 모인<br>
+            전공자 1명과 비전공자 3명으로 이루어진 팀입니다.
+          </p>
         </td>
       </tbody>
     </table>
@@ -161,7 +171,7 @@
     <div class="goalFrame">
     <h2 id="goalTitle">팀 목표</h2>
     <div class="goal" id="goal">
-      <p>저희 팀의 목표는 코딩을 예술적으로 할 수 있게 되는 것입니다.</p>
+      <p>저희 팀의 목표는 포기하지 않고 꾸준히 공부해서 완주에 성공하고 코딩을 예술적으로 잘 하는 개발자로 거듭나는 것입니다.</p>
     </div>
     </div>
 
@@ -213,7 +223,7 @@
   </div>
 
   <div class="membersBtn">
-    <a type="button" class="btn btn-outline-secondary" href="introteam.html">팀원 소개</a>
+    <a type="button" class="btn btn-outline-secondary" href="inside.html">팀원 소개</a>
   </div>
 
   <!-- Footer-->
