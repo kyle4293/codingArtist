@@ -19,26 +19,19 @@
 
 <style>
     .mb-3 {
-        margin-left: 150px
+        /* display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center; */
     }
 
     .table-responsive {
         margin: 50px 150px 30px 150px;
     }
 
-    .comment {
-        margin: 10px 300px 10px 300px;
-        font-size: 25px;
-    }
-
     textarea {
         height: 300px;
 
-    }
-
-    .pwd{
-        align-items:end;
-        margin: 0 450px 0 700px;
     }
 
     .pb-2 {
@@ -49,9 +42,31 @@
         width: 180px;
         height: 300px;
     }
+
+    .img-thumbnail {
+        width: 376px;
+        height: 376px;
+    }
+
+    .mypostingbox {
+
+        width: 600px;
+        margin: 30px auto 30px auto;
+        padding: 20px;
+        box-shadow: 0px 0px 3px 0px blue;
+        border-radius: 5px;
+    }
+
+    .title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
 <body>
+    <!-- 헤더 -->
     <header class="p-3 border-bottom">
         <div id="header" class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -67,13 +82,14 @@
             </div>
     </header>
 
+    <!-- 메인 소개란 -->
     <div class="container px-4 py-5">
         <h2 class="pb-2 border-bottom">아티스트 자세히 알아보기</h2>
 
         <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
             <div class="col d-flex flex-column align-items-start gap-2">
                 <h2 class="fw-bold text-body-emphasis">아티스트 : 이현구</h2>
-                <p class="text-body-secondary">안녕하세요 아티스트 이현구 라고 합니다. 제 얘기를 들려드릴게요!</p>
+                <p class="text-body-secondary">안녕하세요 아티스트 이현구 라고 합니다. 제 TMI를 알려드릴게요!</p>
 
                 <img src="img/이현구.jpg" class="img-thumbnail_1" alt="...">
 
@@ -89,8 +105,8 @@
                                 <use xlink:href="#collection"></use>
                             </svg>
                         </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">주제1</h4>
-                        <p class="text-body-secondary">간단설명.</p>
+                        <h4 class="fw-semibold mb-0 text-body-emphasis">나의 최애곡</h4>
+                        <p class="text-body-secondary"></p>
                     </div>
 
                     <div class="col d-flex flex-column gap-2">
@@ -100,8 +116,8 @@
                                 <use xlink:href="#gear-fill"></use>
                             </svg>
                         </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">주제2</h4>
-                        <p class="text-body-secondary">간단설명.</p>
+                        <h4 class="fw-semibold mb-0 text-body-emphasis">나의 인생영화</h4>
+                        <p class="text-body-secondary"></p>
                     </div>
 
                     <div class="col d-flex flex-column gap-2">
@@ -111,8 +127,8 @@
                                 <use xlink:href="#speedometer"></use>
                             </svg>
                         </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">주제3</h4>
-                        <p class="text-body-secondary">간단설명.</p>
+                        <h4 class="fw-semibold mb-0 text-body-emphasis">나의 버킷리스트</h4>
+                        <p class="text-body-secondary"></p>
                     </div>
 
                     <div class="col d-flex flex-column gap-2">
@@ -130,41 +146,31 @@
         </div>
     </div>
 
+    <!-- 주제 1,2,3 -->
     <main>
-
-        <!-- Marketing messaging and featurettes
-        ================================================== -->
-        <!-- Wrap the rest of the page in another container to center all the content. -->
-
         <div class="container marketing">
-            <!-- START THE FEATURETTES -->
-
             <hr class="featurette-divider">
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading fw-normal lh-1">주제1 대제목 <span class="text-body-secondary"></span></h2>
-                    <p class="lead">주제2 부연설명</p>
+                    <h2 class="featurette-heading fw-normal lh-1">Lenka - skipalong <span
+                            class="text-body-secondary"></span></h2>
+                    <p class="lead">저의 최애곡은 Lenka의 skipalong 이라는 노래입니다. ...</p>
                 </div>
                 <div class="col-md-5">
-                    <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
-                        class="img-thumbnail" alt="...">
-                    <!-- <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg>
-             -->
+                    <img src="img/Lenka.jpeg" class="img-thumbnail" alt="...">
                 </div>
             </div>
 
             <hr class="featurette-divider">
-
             <div class="row featurette">
                 <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading fw-normal lh-1">주제2 대제목 <span class="text-body-secondary"></span></h2>
-                    <p class="lead">주제2 부연설명</p>
+                    <h2 class="featurette-heading fw-normal lh-1">HarryPotter Series <span
+                            class="text-body-secondary"></span></h2>
+                    <p class="lead">저의 인생영화는 해리포터시리즈 입니다. ...</p>
                 </div>
                 <div class="col-md-5 order-md-1">
-                    <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
-                        class="img-thumbnail" alt="...">
-
+                    <img src="img/HarryPotter.jpeg" class="img-thumbnail" alt="...">
                 </div>
             </div>
 
@@ -172,24 +178,18 @@
 
             <div class="row featurette">
                 <div class="col-md-7">
-                    <h2 class="featurette-heading fw-normal lh-1">주제3 대제목 <span class="text-body-secondary"></span></h2>
-                    <p class="lead">주제3 부연설명</p>
+                    <h2 class="featurette-heading fw-normal lh-1">Aurora <span class="text-body-secondary"></span></h2>
+                    <p class="lead">저의 버킷리스트는 오로라 직접 보기 입니다. ...</p>
                 </div>
                 <div class="col-md-5">
-                    <img src="https://img.posterstore.com/zoom/wb0101-8harrypotter-thephilosophersstoneno150x70.jpg"
-                        class="img-thumbnail" alt="...">
-
+                    <img src="img/Aurora.jpeg" class="img-thumbnail" alt="...">
                 </div>
             </div>
-
-            <!-- <hr class="featurette-divider"> -->
-
-            <!-- /END THE FEATURETTES -->
-
-        </div><!-- /.container -->
+        </div>
 
     </main>
 
+    <!-- Contact -->
     <section class="page-section bg-light" id="team">
         <div class="container">
             <div class="text-center">
@@ -234,8 +234,9 @@
         </div>
     </section>
 
+    <!-- 방명록 -->
     <hr class="my-4">
-    <h2 class="mb-3">방명록</h2>
+    <h2 class="title">방명록</h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
@@ -356,24 +357,21 @@
             </tbody>
         </table>
     </div>
-    <div class="comment">
-        <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">방명록 작성</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    <div class="mypostingbox">
+        <div class="comment">
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">방명록 작성</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="pwd">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username"
+                    aria-describedby="button-addon2">
+                <button class="btn btn-primary" type="button" id="button-addon2">작성완료</button>
+            </div>
         </div>
     </div>
-    <div class="pwd">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="비밀번호" aria-label="Recipient's username"
-                aria-describedby="button-addon2">
-            <button class="btn btn-primary" type="button" id="button-addon2">작성완료</button>
-        </div>
-    </div>
-
-
-
-
-
 
     <!-- Footer-->
     <footer class="footer py-4">
