@@ -32,11 +32,20 @@
         .subtitle {
             color: #737B7D;
             font-weight: bolder;
+            text-align: center;
+
+            margin: 30px 50px 50px 100px;
         }
 
         .mycard {
-            width: 1200px;
-            margin: 20px auto 0px auto;
+            width: 1000px;
+            margin: 60px auto 60px auto;
+        }
+
+        .profile {
+            display: inline-block;
+            justify-content: start;
+
         }
     </style>
 </head>
@@ -45,14 +54,14 @@
     <header class="p-3 border-bottom">
         <div id="header" class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="index.html" class="d-flex align-items-center text-dark text-decoration-none">
+                <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                     <img src="img/codingArtistLogo.png" width="150px">
                 </a>
 
                 <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
                     <li><a href="about.html" class="nav-link px-2 link-dark">About</a></li>
                     <li><a href="inside.html" class="nav-link px-2 link-dark">Inside</a></li>
-                    <li><a href="contact.html" class="nav-link px-2 link-dark">Contact</a></li>
+                    <li><a href="Contact.html" class="nav-link px-2 link-dark">Contact</a></li>
                 </ul>
             </div>
     </header>
@@ -60,7 +69,13 @@
     <div class="main">
         <div>
             <h1 class="title">아티스트를 소개합니다.</h1>
-            <h7 class="subtitle">소제목</h7>
+            <div class="subtitle">
+                우리는 "코드아티스트"라 불리는 열정적인 팀입니다.<br>
+                프로그래밍과 디자인의 조화로 팀페이지를 만들고자 하는 것을 꿈꾸며,<br>
+                이 꿈을 함께 실현하고자 노력하고 있습니다.<br>
+                저희 팀은 다양한 배경과 역량을 가진 구성원들로 이루어져 있어,<br>
+                다양한 아이디어와 창의적인 솔루션을 찾아내는 데 능력을 지닌 팀원들과 함께 작업하고 있습니다.<br>
+            </div>
         </div>
         <img src="img/introTeambg.jpg" class="mainimg" width="576">
     </div>
@@ -69,10 +84,13 @@
             <div class="col">
                 <a href="...">
                     <div class="card h-100">
-                        <img src="./img/최창규.jpeg" class="card-img-top" alt="...">
+                        <img src="img/최창규.jpeg" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">최창규</h5>
-                            <p class="card-text">팀원 소개</p>
+                            <div class="profile">
+                                <h5 class="card-title">최창규</h5>
+                                <h6>팀장</h6>
+                            </div>
+                            <p class="card-text">ESTJ</p>
                         </div>
                     </div>
                 </a>
@@ -80,10 +98,13 @@
             <div class="col">
                 <a href="...">
                     <div class="card h-100">
-                        <img src="..." class="card-img-top" alt="...">
+                        <img src="img/안태인.jpg" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">팀원 이름</h5>
-                            <p class="card-text">팀원 소개</p>
+                            <div class="profile">
+                                <h5 class="card-title">안태인</h5>
+                                <h6>팀원</h6>
+                            </div>
+                            <p class="card-text">ENFP</p>
                         </div>
                     </div>
                 </a>
@@ -91,10 +112,13 @@
             <div class="col">
                 <a href="...">
                     <div class="card h-100">
-                        <img src="..." class="card-img-top" alt="...">
+                        <img src="img/최창규.jpeg" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">팀원 이름</h5>
-                            <p class="card-text">팀원 소개</p>
+                            <div class="profile">
+                                <h5 class="card-title">이현구</h5>
+                                <h6>팀원</h6>
+                            </div>
+                            <p class="card-text">ISFP</p>
                         </div>
                     </div>
                 </a>
@@ -102,14 +126,18 @@
             <div class="col">
                 <a href="...">
                     <div class="card h-100">
-                        <img src="..." class="card-img-top" alt="...">
+                        <img src="img/최창규.jpeg" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">팀원 이름</h5>
-                            <p class="card-text">팀원 소개</p>
+                            <div class="profile">
+                                <h5 class="card-title">길경남</h5>
+                                <h6>팀원</h6>
+                            </div>
+                            <p class="card-text">ISTJ</p>
                         </div>
                     </div>
                 </a>
             </div>
+
         </div>
     </div>
     <footer class="footer py-4">
