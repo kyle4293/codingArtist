@@ -71,14 +71,16 @@
       width: 130px;
       height: 45px;
     }
-    
+
     .goalFrame {
       margin: 20px auto 30px auto;
     }
-    .ruleFrame{
+
+    .ruleFrame {
       margin: 20px auto 0px auto;
     }
-    h2:not(.introTitle){
+
+    h2:not(.introTitle) {
       cursor: pointer;
       text-align: center;
     }
@@ -86,8 +88,29 @@
 
   <script type="module">
 
-    let admissive = false;
-    const regex = /[0-9`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gim;
+    // Firebase SDK 라이브러리 가져오기
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { collection, addDoc, query, where, doc, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+
+    // Firebase 구성 정보 설정
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvFpgx2vL0ivDQvrPrGwysXB4aWTXaPL0",
+      authDomain: "sparta-1730c.firebaseapp.com",
+      projectId: "sparta-1730c",
+      storageBucket: "sparta-1730c.appspot.com",
+      messagingSenderId: "347762079276",
+      appId: "1:347762079276:web:f810e63af91fcaaa23c389",
+      measurementId: "G-SJ8YR6BE0H"
+    };
+
+
+    // Firebase 인스턴스 초기화
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     $('#goalTitle').click(async function () {
       $('#goal').toggle();
@@ -97,33 +120,138 @@
       $('#rules').toggle();
     })
 
-    // $('#goalTitle').click(async function () {
-    //   if(!admissive) {
-    //       const teamName = prompt('저희 팀의 이름을 입력해주세요'). replace(regex, "").toLowerCase();
-    //       if(teamName.includes('코딩아티스트') || teamName.includes('codingartist')) {
-    //         $('#goal').toggle();
-    //         admissive = true;
-    //       } else {
-    //         alert("틀렸습니다.");
-    //       }
-    //   } else {
-    //     $('#goal').toggle();
-    //   }
-    // });
 
-    // $('#ruleTitle').click(async function () {
-    //   if(!admissive) {
-    //       const teamName = prompt('저희 팀의 이름을 입력해주세요'). replace(regex, "").toLowerCase();
-    //       if(teamName.includes('코딩아티스트') || teamName.includes('codingartist')) {
-    //         $('#rules').toggle();
-    //         admissive = true;
-    //       } else {
-    //         alert("틀렸습니다.");
-    //       }
-    //   } else {
-    //     $('#rules').toggle();
-    //   }
-    // });
+
+    let aboutCommentsRef = collection(db, "about_comments");
+
+    // 방명록 생성
+    $('#createBtn').click(async function() {
+      let content = $('#content').val();
+      let username = $('#userName').val();
+      let password = $('#password').val();
+      let id = self.crypto.randomUUID();
+
+      if( !content | !username | !password) {
+        alert('공백이 존재하면 안됩니다.');
+        return;
+      }
+      
+      let now = new Date();
+      let year = now.getFullYear();
+      let month = now.getMonth();
+      let day = now.getDay();
+      let hour = now.getHours();
+      let minutes = now.getMinutes();
+      
+      let createDate = `${year}년 ${month+1}월 ${day}일 ${hour}:${minutes > 10? minutes : '0'+minutes}`;
+      
+      let comment = {
+        'content': content,
+        'username': username,
+        'password': password,
+        'create_date': createDate,
+      };
+      await setDoc(doc(aboutCommentsRef, id), comment);
+      window.location.reload();
+    })
+
+    // 방명록 불러오기
+    let q = query(aboutCommentsRef, orderBy('create_date', 'desc'))
+    let docs = await getDocs(q);
+    let count = docs['_snapshot']['docChanges'].length;
+    $('#count').append(`${count}개의 댓글이 있습니다.`);
+    docs.forEach((doc) => {
+      let row = doc.data();
+
+      let content = row['content'];
+      let username = row['username'];
+      let password = row['password'];
+      let createDate = row['create_date'];
+      let id = doc.id;
+
+      let temp_html = `
+      <div class="commentFrame">
+        <div class="commentForm">
+        <div class="card-text">${content}</div>
+            <div class="d-flex justify-content-end">
+              <div class="badge bg-light text-dark p-2 text-start">
+                <div class="mb-2">${username}</div>
+                <div>${createDate}</div>
+                <div class="my-3">
+                  <a class="update btn btn-sm btn-outline-secondary" value="${id}">수정</a>
+                  <a class="delete btn btn-sm btn-outline-secondary" value="${id}"}>삭제</a>
+                </div>
+              </div>
+          </div>
+          </div>
+        </div>
+      `;
+      $('#card').append(temp_html);
+    })
+
+    //방명록 삭제
+    $('.delete').click(async function() {
+      let id = $(this).attr("value");
+      let password = prompt('비밀번호를 입력해주세요');
+
+      // id값으로 데이터 한 개만 가져오기
+      const commentRef = doc(db, "about_comments", id);
+      const comment = await getDoc(commentRef);
+      const realPassword = comment.data()['password'];
+
+      if(realPassword == password) {
+        deleteDoc(commentRef);
+        setTimeout(function() { // 바로 reload하면 데이터 삭제가 이루어지지 않아서 지연 사용
+          alert('삭제 성공');
+          location.reload();
+        }, 200);
+      }else {
+        alert('비밀번호가 틀렸습니다.');
+      }
+    })
+
+
+    // 데이터 수정
+    $('.update').click(async function() {
+      let id = $(this).attr("value");
+      let password = prompt('비밀번호를 입력해주세요');
+
+      const commentRef = doc(db, "about_comments", id);
+      const comment = await getDoc(commentRef);
+      const realPassword = comment.data()['password'];
+      const content = comment.data()['content'];
+
+      if(realPassword == password) {
+        let template = `
+        <textarea class="form-control updateContent" rows="4" placeholder="방명록을 작성하세요.">${content}</textarea>
+        <button type="button" class="btn btn-primary updateBtn" value="${id}">수정완료</button>
+        `;
+        const htmlBefore = $(this).parents('.commentForm');
+        const htmlAfter = $(this).parents('.commentFrame');
+        htmlBefore.remove();
+        htmlAfter.append(template);
+      }else {
+        alert('비밀번호가 틀렸습니다.');
+      }
+    });
+
+    $('.commentFrame').on('click', ".updateBtn", async function() {
+      let content = $(this).prev().val();
+      let id = $(this).attr('value');
+      const commentRef = doc(db, "about_comments", id);
+
+      if(!content) {
+        alert('내용을 입력해주세요');
+      }
+
+      await updateDoc(commentRef, {
+        content: content,
+      });
+      setTimeout(function() { // 바로 reload하면 데이터 수정이 이루어지지 않아서 지연 사용
+          alert('수정이 완료되었습니다.');
+          location.reload();
+        }, 200);
+    });
   </script>
 
 </head>
@@ -132,18 +260,18 @@
 
   <header class="p-3 border-bottom">
     <div id="header" class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="index.html" class="d-flex align-items-center text-dark text-decoration-none">
-                <img src="img/codingArtistLogo.png" width="150px">
-            </a>
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="index.html" class="d-flex align-items-center text-dark text-decoration-none">
+          <img src="img/codingArtistLogo.png" width="150px">
+        </a>
 
-            <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
-                <li><a href="about.html" class="nav-link px-2 link-dark">About</a></li>
-                <li><a href="inside.html" class="nav-link px-2 link-dark">Inside</a></li>
-                <li><a href="contact.html" class="nav-link px-2 link-dark">Contact</a></li>
-            </ul>
-        </div>
-</header>
+        <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
+          <li><a href="about.html" class="nav-link px-2 link-dark">About</a></li>
+          <li><a href="inside.html" class="nav-link px-2 link-dark">Inside</a></li>
+          <li><a href="contact.html" class="nav-link px-2 link-dark">Contact</a></li>
+        </ul>
+      </div>
+  </header>
 
   <!-- Masthead-->
   <div class="teamTitle">
@@ -154,49 +282,53 @@
     <table class="introAndImage">
       <tbody>
         <td class="teamImage">
-          <img class="image"
-            src="./img/about.png">
+          <img class="image" src="./img/about.png">
         </td>
         <td class="intro">
           <h2 class="introTitle">팀 소개</h2>
           <p>저희는 코딩을 예술적으로 잘할 수 있게<br>
-            성장하고 싶은 사람들이 모인<br>
-            전공자 1명과 비전공자 3명으로 이루어진 팀입니다.
+            성장하고 싶은 사람들로<br>
+            전공자 1명과 비전공자 3명의<br>
+            높은 잠재력을 가진 인원들이 모여있는 팀입니다.
           </p>
         </td>
       </tbody>
     </table>
   </div>
 
-    <div class="goalFrame">
+  <div class="goalFrame">
     <h2 id="goalTitle">팀 목표</h2>
     <div class="goal" id="goal">
       <p>저희 팀의 목표는 포기하지 않고 꾸준히 공부해서 완주에 성공하고 코딩을 예술적으로 잘 하는 개발자로 거듭나는 것입니다.</p>
     </div>
-    </div>
+  </div>
 
 
-    <div class="ruleFrame">
+  <div class="ruleFrame">
     <h2 id="ruleTitle">팀 규칙</h2>
     <div class="rules" id="rules">
       <div class="accordion" id="accordionPanelsStayOpenExample">
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+              aria-controls="panelsStayOpen-collapseOne">
               식사시간
             </button>
           </h2>
           <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
             <div class="accordion-body">
               <p>점심 13시~14시<br>
-                저녁 19시~20시
+                저녁 18시~19시
               </p>
             </div>
           </div>
         </div>
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+              aria-controls="panelsStayOpen-collapseTwo">
               Gti Merge 시간
             </button>
           </h2>
@@ -208,7 +340,9 @@
         </div>
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+              aria-controls="panelsStayOpen-collapseThree">
               회의 시간
             </button>
           </h2>
@@ -224,6 +358,22 @@
 
   <div class="membersBtn">
     <a type="button" class="btn btn-outline-secondary" href="inside.html">팀원 소개</a>
+  </div>
+
+  <div class="comments m-4 p-4">
+    <h4>방명록</h4>
+    <h6 class="border-bottom my-3 py-2" id="count"></h5>
+      <div>
+        <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
+        <input type="text" class="form-control" placeholder="password" aria-label="Server" id="password">
+        <input type="text" class="form-control" placeholder="Username" aria-label="Username" id="userName">
+        <button id="createBtn" type="button" class="btn btn-primary">방명록 작성</button>
+      </div>
+
+      <div class="card my-4">
+        <div class="card-body" id="card">
+        </div>
+      </div>
   </div>
 
   <!-- Footer-->
