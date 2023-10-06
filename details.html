@@ -15,8 +15,20 @@
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style>
-        .table-responsive {
-            margin: 50px 150px 30px 150px;
+        .box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .box>.btn {
+
+            margin-top: 10px;
+        }
+
+        .box>.form-control {
+            margin-right: 5px;
         }
 
         textarea {
@@ -37,30 +49,14 @@
             width: 376px;
             height: 376px;
         }
-
-        .mypostingbox {
-
-            width: 600px;
-            margin: 30px auto 30px auto;
-            padding: 20px;
-            box-shadow: 0px 0px 3px 0px blue;
-            border-radius: 5px;
-        }
-
-        .title {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-        }
     </style>
 
     <script type="module">
         // Firebase SDK 라이브러리 가져오기
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { collection, addDoc, query, where, doc, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -79,61 +75,137 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        let aboutCommentsRef = collection(db, "guestbook");
 
-        $("#submit").click(async function () {
+        // 방명록 생성
+        $('#createBtn').click(async function () {
             let content = $('#content').val();
-            let pwd = $('#pwd').val();
-            let date = new Date();
-            let name = $('#name').val();
+            let username = $('#userName').val();
+            let password = $('#password').val();
+            let id = self.crypto.randomUUID();
 
-            let doc = {
+            if (!content | !username | !password) {
+                alert('공백이 존재하면 안됩니다.');
+                return;
+            }
+
+            let now = new Date();
+            let year = now.getFullYear();
+            let month = now.getMonth();
+            let day = now.getDay();
+            let hour = now.getHours();
+            let minutes = now.getMinutes();
+
+            let createDate = `${year}년 ${month + 1}월 ${day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}`;
+
+            let comment = {
                 'content': content,
-                'pwd': pwd,
-                'date': date.toLocaleString(),
-                'name': name
-
+                'username': username,
+                'password': password,
+                'create_date': createDate,
             };
-            await addDoc(collection(db, "guestbook"), doc);
-            alert('저장 완료!');
+            await setDoc(doc(aboutCommentsRef, id), comment);
             window.location.reload();
-
-
-            // console.log(doc['content']);
-            // console.log(doc['pwd']);
-            // console.log(doc['date']);
-            // console.log(doc['name']);
-
-            //수정,삭제,작성자 기능구현하는법 알아오기
         })
-            let cnt =0;
-        let docs = await getDocs(collection(db, "guestbook"));
+
+        // 방명록 불러오기
+        let q = query(aboutCommentsRef, orderBy('create_date', 'desc'))
+        let docs = await getDocs(q);
+        let count = docs['_snapshot']['docChanges'].length;
+        $('#count').append(`${count}개의 댓글이 있습니다.`);
         docs.forEach((doc) => {
             let row = doc.data();
-            cnt++;
-            let pwd = row['pwd'];
+
             let content = row['content'];
-            let date = row['date'];
-            let name = row['name'];
+            let username = row['username'];
+            let password = row['password'];
+            let createDate = row['create_date'];
+            let id = doc.id;
 
             let temp_html = `
-            <div class="card my-4">
-            <div class="card-body">
-                <div class="card-text">${content}</div>
-                <div class="d-flex justify-content-end">
-                    <div class="badge bg-light text-dark p-2 text-start">
-                        <div class="mb-2">${name}</div>
-                        <div>${date}</div>
-                        <div class="my-3">
-                                <button id="update" type="button" class="btn btn-outline-secondary">수정</button>
-                                <button id="delete" type="button" class="btn btn-outline-secondary">삭제</button>
-                        </div>
-                    </div>
+      <div class="commentFrame">
+        <div class="commentForm">
+        <div class="card-text">${content}</div>
+            <div class="d-flex justify-content-end">
+              <div class="badge bg-light text-dark p-2 text-start">
+                <div class="mb-2">${username}</div>
+                <div>${createDate}</div>
+                <div class="my-3">
+                  <a class="update btn btn-sm btn-outline-secondary" value="${id}">수정</a>
+                  <a class="delete btn btn-sm btn-outline-secondary" value="${id}"}>삭제</a>
                 </div>
-            </div>
-        </div>`;
+              </div>
+          </div>
+          </div>
+        </div>
+        <hr>
+      `;
             $('#mycomment').append(temp_html);
+        })
+
+        //방명록 삭제
+        $('.delete').click(async function () {
+            let id = $(this).attr("value");
+            let password = prompt('비밀번호를 입력해주세요');
+
+            // id값으로 데이터 한 개만 가져오기
+            const commentRef = doc(db, "guestbook", id);
+            const comment = await getDoc(commentRef);
+            const realPassword = comment.data()['password'];
+
+            if (realPassword == password) {
+                deleteDoc(commentRef);
+                setTimeout(function () { // 바로 reload하면 데이터 삭제가 이루어지지 않아서 지연 사용
+                    alert('삭제 성공');
+                    location.reload();
+                }, 200);
+            } else {
+                alert('비밀번호가 틀렸습니다.');
+            }
+        })
+
+
+        // 데이터 수정
+        $('.update').click(async function () {
+            let id = $(this).attr("value");
+            let password = prompt('비밀번호를 입력해주세요');
+
+            const commentRef = doc(db, "guestbook", id);
+            const comment = await getDoc(commentRef);
+            const realPassword = comment.data()['password'];
+            const content = comment.data()['content'];
+
+            if (realPassword == password) {
+                let template = `
+        <textarea class="form-control updateContent" rows="4" placeholder="방명록을 작성하세요.">${content}</textarea>
+        <button type="button" class="btn btn-primary updateBtn" value="${id}">수정완료</button>
+        `;
+                const htmlBefore = $(this).parents('.commentForm');
+                const htmlAfter = $(this).parents('.commentFrame');
+                htmlBefore.remove();
+                htmlAfter.append(template);
+            } else {
+                alert('비밀번호가 틀렸습니다.');
+            }
         });
-            $('#cnt').append(`<h6 class="border-bottom my-3 py-2">${ cnt }개의 글이 있습니다.</h5>`);
+
+        $('.commentFrame').on('click', ".updateBtn", async function () {
+            let content = $(this).prev().val();
+            let id = $(this).attr('value');
+            const commentRef = doc(db, "guestbook", id);
+
+            if (!content) {
+                alert('내용을 입력해주세요');
+            }
+
+            await updateDoc(commentRef, {
+                content: content,
+            });
+            setTimeout(function () { // 바로 reload하면 데이터 수정이 이루어지지 않아서 지연 사용
+                alert('수정이 완료되었습니다.');
+                location.reload();
+            }, 200);
+        });
 
     </script>
 </head>
@@ -262,6 +334,32 @@
 
     </main>
 
+
+
+
+
+
+    <!-- Comments-->
+    <!-- 댓글 -->
+    <div class="comments m-4 p-4">
+        <h4 id="cnt">방명록</h4>
+        <form class="my-4">
+            <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
+            <div class="box">
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username" id="userName">
+                <input type="text" class="form-control" placeholder="password" aria-label="Server" id="password">
+                <button id="createBtn" type="button" class="btn btn-primary">방명록 작성</button>
+            </div>
+        </form>
+        <hr>
+        <div class="card my-4">
+            <div class="card-body" id="mycomment">
+
+            </div>
+        </div>
+    </div>
+
+
     <!-- Contact -->
     <section class="page-section bg-light" id="team">
         <div class="container">
@@ -300,37 +398,11 @@
             </div>
             <div class="my-5 row">
                 <div class="col-lg-8 mx-auto text-center">
-                    <p class="large text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque,
-                        laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
+                    <p class="large text-muted"></p>
                 </div>
             </div>
         </div>
     </section>
-
-
-
-
-    <!-- Comments-->
-    <!-- 댓글 -->
-    <div class="comments m-4 p-4">
-        <h4 id ="cnt">방명록</h4>
-            <form class="my-4">
-                <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
-                <input id="submit" type="button" value="방명록 작성" class="btn btn-primary">
-                <input id="pwd" type="text" class="form-control" placeholder="password" aria-label="Server">
-                <input id="name" type="text" class="form-control" placeholder="Username" aria-label="Username">
-            </form>
-            <hr>
-            <div id="mycomment">
-                
-
-            </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
 
 
     <!-- Footer-->
