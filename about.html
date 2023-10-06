@@ -47,7 +47,6 @@
       width: 400px;
       margin: 20px auto 0px auto;
       text-align: center;
-      display: none;
     }
 
     p {
@@ -59,7 +58,6 @@
       height: 60px;
       margin: 20px auto 0px auto;
       text-align: center;
-      display: none;
     }
 
     .membersBtn {
@@ -81,7 +79,6 @@
     }
 
     h2:not(.introTitle) {
-      cursor: pointer;
       text-align: center;
     }
   </style>
@@ -112,51 +109,43 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    $('#goalTitle').click(async function () {
-      $('#goal').toggle();
-    })
+    const table = "about_comments"; // 사용하는 페이지 테이블에 맞게 수정해주세요
+    let commentsRef = collection(db, table);
 
-    $('#ruleTitle').click(async function () {
-      $('#rules').toggle();
-    })
-
-
-
-    let aboutCommentsRef = collection(db, "about_comments");
 
     // 방명록 생성
-    $('#createBtn').click(async function() {
+    $('#createBtn').click(async function () {
       let content = $('#content').val();
       let username = $('#userName').val();
       let password = $('#password').val();
       let id = self.crypto.randomUUID();
 
-      if( !content | !username | !password) {
+      if (!content | !username | !password) {
         alert('공백이 존재하면 안됩니다.');
         return;
       }
-      
+
       let now = new Date();
       let year = now.getFullYear();
       let month = now.getMonth();
       let day = now.getDay();
       let hour = now.getHours();
       let minutes = now.getMinutes();
-      
-      let createDate = `${year}년 ${month+1}월 ${day}일 ${hour}:${minutes > 10? minutes : '0'+minutes}`;
-      
+
+      let createDate = `${year}년 ${month + 1}월 ${day > 10 ? day : '0' + day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}`;
+
       let comment = {
         'content': content,
         'username': username,
         'password': password,
         'create_date': createDate,
       };
-      await setDoc(doc(aboutCommentsRef, id), comment);
+      await setDoc(doc(commentsRef, id), comment);
       window.location.reload();
     })
 
     // 방명록 불러오기
-    let q = query(aboutCommentsRef, orderBy('create_date', 'desc'))
+    let q = query(commentsRef, orderBy('create_date', 'desc'))
     let docs = await getDocs(q);
     let count = docs['_snapshot']['docChanges'].length;
     $('#count').append(`${count}개의 댓글이 있습니다.`);
@@ -190,38 +179,38 @@
     })
 
     //방명록 삭제
-    $('.delete').click(async function() {
+    $('.delete').click(async function () {
       let id = $(this).attr("value");
       let password = prompt('비밀번호를 입력해주세요');
 
       // id값으로 데이터 한 개만 가져오기
-      const commentRef = doc(db, "about_comments", id);
+      const commentRef = doc(db, table, id);
       const comment = await getDoc(commentRef);
       const realPassword = comment.data()['password'];
 
-      if(realPassword == password) {
+      if (realPassword == password) {
         deleteDoc(commentRef);
-        setTimeout(function() { // 바로 reload하면 데이터 삭제가 이루어지지 않아서 지연 사용
+        setTimeout(function () { // 바로 reload하면 데이터 삭제가 이루어지지 않아서 지연 사용
           alert('삭제 성공');
           location.reload();
         }, 200);
-      }else {
+      } else {
         alert('비밀번호가 틀렸습니다.');
       }
     })
 
 
     // 데이터 수정
-    $('.update').click(async function() {
+    $('.update').click(async function () {
       let id = $(this).attr("value");
       let password = prompt('비밀번호를 입력해주세요');
 
-      const commentRef = doc(db, "about_comments", id);
+      const commentRef = doc(db, table, id);
       const comment = await getDoc(commentRef);
       const realPassword = comment.data()['password'];
       const content = comment.data()['content'];
 
-      if(realPassword == password) {
+      if (realPassword == password) {
         let template = `
         <textarea class="form-control updateContent" rows="4" placeholder="방명록을 작성하세요.">${content}</textarea>
         <button type="button" class="btn btn-primary updateBtn" value="${id}">수정완료</button>
@@ -230,28 +219,30 @@
         const htmlAfter = $(this).parents('.commentFrame');
         htmlBefore.remove();
         htmlAfter.append(template);
-      }else {
+      } else {
         alert('비밀번호가 틀렸습니다.');
       }
     });
 
-    $('.commentFrame').on('click', ".updateBtn", async function() {
+    $('.commentFrame').on('click', ".updateBtn", async function () {
       let content = $(this).prev().val();
       let id = $(this).attr('value');
-      const commentRef = doc(db, "about_comments", id);
 
-      if(!content) {
+      if (!content) {
         alert('내용을 입력해주세요');
       }
+
+      const commentRef = doc(db, table, id);
 
       await updateDoc(commentRef, {
         content: content,
       });
-      setTimeout(function() { // 바로 reload하면 데이터 수정이 이루어지지 않아서 지연 사용
-          alert('수정이 완료되었습니다.');
-          location.reload();
-        }, 200);
+      setTimeout(function () { // 바로 reload하면 데이터 수정이 이루어지지 않아서 지연 사용
+        alert('수정이 완료되었습니다.');
+        location.reload();
+      }, 200);
     });
+
   </script>
 
 </head>
@@ -360,9 +351,11 @@
     <a type="button" class="btn btn-outline-secondary" href="inside.html">팀원 소개</a>
   </div>
 
+  <!-- 방명록 -->
   <div class="comments m-4 p-4">
     <h4>방명록</h4>
-    <h6 class="border-bottom my-3 py-2" id="count"></h5>
+    <h6 class="border-bottom my-3 py-2" id="count">
+      </h5>
       <div>
         <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
         <input type="text" class="form-control" placeholder="password" aria-label="Server" id="password">
