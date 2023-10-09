@@ -22,9 +22,8 @@
                 </a>
 
                 <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
-                    <li><a href="about.html" class="nav-link px-2 link-dark">About</a></li>
-                    <li><a href="inside.html" class="nav-link px-2 link-dark">Inside</a></li>
-                    <li><a href="contact.html" class="nav-link px-2 link-dark">Contact</a></li>
+                    <li><a href="about.html" class="nav-link px-2 link-dark">About C.A.</a></li>
+                    <li><a href="inside.html" class="nav-link px-2 link-dark">Inside C.A.</a></li>
                 </ul>
             </div>
     </header>
@@ -34,7 +33,7 @@
         <div class="container">
             <div class="masthead-subheading">Welcome To Our Studio</div>
             <div class="masthead-heading text-uppercase">CodingArtist</div>
-            <a style="text-decoration: none; color: #fff;" class="btn btn-primary text-uppercase" href="#">About us</a>
+            <a style="text-decoration: none; color: #fff;" class="btn btn-primary text-uppercase" href="about.html">About us</a>
         </div>
     </div>
 
@@ -43,7 +42,7 @@
     <!-- 댓글 -->
     <div class="comments m-4 p-4">
         <h4>방명록</h4>
-        <h6 class="border-bottom my-3 py-2">{ comment_set.count }개의 글이 있습니다.</h5>
+        <h6 id="commentCnt" class="border-bottom my-3 py-2"></h5>
 
         <form class="my-4">
             <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
