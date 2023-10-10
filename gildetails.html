@@ -86,7 +86,7 @@
 
 
     // 방명록 생성
-    $('#createBtn').click(async function () {
+    $('#submit').click(async function () {
       let content = $('#content').val();
       let username = $('#userName').val();
       let password = $('#password').val();
@@ -131,8 +131,8 @@
       let id = doc.id;
 
       let temp_html = `
-    <div class="commentFrame">
-      <div class="commentForm">
+      <div class="commentFrame card my-4">
+        <div class="commentForm card-body">
       <div class="card-text">${content}</div>
           <div class="d-flex justify-content-end">
             <div class="badge bg-light text-dark p-2 text-start">
@@ -215,7 +215,6 @@
 </head>
 
 <body>
-  <!-- 헤더 -->
   <header class="p-3 border-bottom">
     <div id="header" class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -224,9 +223,8 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
-          <li><a href="about.html" class="nav-link px-2 link-dark">About</a></li>
-          <li><a href="inside.html" class="nav-link px-2 link-dark">Inside</a></li>
-          <li><a href="contact.html" class="nav-link px-2 link-dark">Contact</a></li>
+          <li><a href="about.html" class="nav-link px-2 link-dark">About C.A.</a></li>
+          <li><a href="inside.html" class="nav-link px-2 link-dark">Inside C.A.</a></li>
         </ul>
       </div>
   </header>
@@ -329,8 +327,10 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading fw-normal lh-1">책임감 <span class="text-body-secondary"></span></h2>
-          <p class="lead">저는 강한 책임감을 바탕으로 맡은 역할을 수행하고<br>
+          <h2 class="featurette-heading fw-normal lh-1">장점 <span class="text-body-secondary"></span></h2>
+          <p class="lead">
+            제 장점은 책임감입니다.<br>
+            저는 강한 책임감을 바탕으로 맡은 역할을 수행하고<br>
             목표를 달성하기 위해 끊임없이 노력합니다.</p>
         </div>
         <div class="col-md-5">
@@ -345,18 +345,18 @@
   <!-- 방명록 -->
   <div class="comments m-4 p-4">
     <h4>방명록</h4>
-    <h6 class="border-bottom my-3 py-2" id="count">
+    <h6 id="count" class="border-bottom my-3 py-2">
       </h5>
-      <div>
-        <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
-        <input type="text" class="form-control" placeholder="password" aria-label="Server" id="password">
-        <input type="text" class="form-control" placeholder="Username" aria-label="Username" id="userName">
-        <button id="createBtn" type="button" class="btn btn-primary">방명록 작성</button>
-      </div>
 
-      <div class="card my-4">
-        <div class="card-body" id="card">
-        </div>
+      <form class="my-4">
+        <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
+        <button id="submit" type="button" class="btn btn-primary">방명록 작성</button>
+        <input id="password" type="text" class="form-control" placeholder="password" aria-label="Server">
+        <input id="userName" type="text" class="form-control" placeholder="Username" aria-label="Username">
+      </form>
+      <hr>
+      <div id="card">
+
       </div>
   </div>
 
