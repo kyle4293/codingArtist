@@ -65,7 +65,7 @@
       text-align: center;
     }
 
-    .btn-outline-secondary {
+    .insideBtn {
       width: 130px;
       height: 45px;
     }
@@ -88,7 +88,7 @@
     // Firebase SDK 라이브러리 가져오기
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    import { collection, query, doc, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { collection, query, doc, orderBy, where } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     import { getDocs, deleteDoc, getDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 
@@ -109,7 +109,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const table = "about_comments"; // 사용하는 페이지 테이블에 맞게 수정해 주세요
+    const table = "comments";
+    const type = "about"; // 사용하는 페이지에 맞게 수정해 주세요
     let commentsRef = collection(db, table);
 
 
@@ -139,47 +140,84 @@
         'username': username,
         'password': password,
         'create_date': createDate,
+        'type': type,
       };
       await addDoc(commentsRef, comment);
       window.location.reload();
     })
 
     // 방명록 불러오기
-    let q = query(commentsRef, orderBy('create_date'))
+    let q = query(commentsRef, where("type", "==", type), orderBy('create_date'));
     let docs = await getDocs(q);
     let count = docs['_snapshot']['docChanges'].length;
     $('#count').append(`${count}개의 댓글이 있습니다.`);
-    docs.forEach((doc) => {
+
+    docs.forEach(async (doc) => {
       let row = doc.data();
 
       let content = row['content'];
       let username = row['username'];
       let password = row['password'];
       let createDate = row['create_date'];
+      let parentId = row['parent_id'];
       let id = doc.id;
 
-      let temp_html = `
+      if (!parentId) {
+        let temp_html = `
       <div class="commentFrame card my-4">
-        <div class="commentForm card-body">
-        <div class="card-text">${content}</div>
-            <div class="d-flex justify-content-end">
-              <div class="badge bg-light text-dark p-2 text-start">
-                <div class="mb-2">${username}</div>
-                <div>${createDate}</div>
-                <div class="my-3">
-                  <a class="update btn btn-sm btn-outline-secondary" value="${id}">수정</a>
-                  <a class="delete btn btn-sm btn-outline-secondary" value="${id}"}>삭제</a>
+      <div class="commentForm card-body" id="${id}">
+      <div class="card-text">${content}</div>
+          <div class="d-flex justify-content-end">
+            <div class="badge bg-light text-dark p-2 text-start">
+              <div class="mb-2">${username}</div>
+              <div>${createDate}</div>
+              <div class="my-3">
+                <a class="update btn btn-sm btn-outline-secondary" value="${id}">수정</a>
+                <a class="delete btn btn-sm btn-outline-secondary" value="${id}"}>삭제</a>
+                <a class="reply btn btn-sm btn-outline-secondary" value="${id}"}>대댓글</a>
                 </div>
-              </div>
-          </div>
-          </div>
+            </div>
         </div>
-      `;
-      $('#card').append(temp_html);
+        </div>
+      </div>
+    `;
+        $('#card').append(temp_html);
+      }
+
+      let replyQ = query(commentsRef, where("parent_id", "==", id), orderBy("create_date"));
+      let replyDocs = await getDocs(replyQ);
+      replyDocs.forEach((replyDoc) => {
+        let replyRow = replyDoc.data();
+        let replyContent = replyRow['content'];
+        let replyUsername = replyRow['username'];
+        let replyPassword = replyRow['password'];
+        let replyCreateDate = replyRow['create_date'];
+        let parentId = replyRow['parent_id'];
+        let replyId = replyDoc.id;
+
+        let reply_html = `
+          <div class="commentFrame card my-4">
+          <div class="commentForm card-body">
+          <div class="card-text">${replyContent}</div>
+              <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                  <div class="mb-2">${replyUsername}</div>
+                  <div>${replyCreateDate}</div>
+                  <div class="my-3">
+                    <a class="update btn btn-sm btn-outline-secondary" value="${replyId}">수정</a>
+                    <a class="delete btn btn-sm btn-outline-secondary" value="${replyId}"}>삭제</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+          </div>
+       `;
+        $(`#${id}`).append(reply_html);
+      })
     })
 
     //방명록 삭제
-    $('.delete').click(async function () {
+    $('.commentForm').on('click', '.delete', async function () {
       let id = $(this).attr("value");
       let password = prompt('비밀번호를 입력해 주세요');
 
@@ -199,7 +237,7 @@
 
 
     // 방명록 수정
-    $('.update').click(async function () {
+    $('.commentForm').on('click', '.update', async function () {
       let id = $(this).attr("value");
       let password = prompt('비밀번호를 입력해 주세요');
 
@@ -207,16 +245,19 @@
       const comment = await getDoc(commentRef);
       const realPassword = comment.data()['password'];
       const content = comment.data()['content'];
+      let hasParent = comment.data()['parent_id'];
 
       if (realPassword == password) {
         let template = `
-        <textarea class="form-control updateContent" rows="4" placeholder="방명록을 작성하세요.">${content}</textarea>
-        <button type="button" class="btn btn-primary updateBtn" value="${id}">수정완료</button>
-        `;
-        const htmlBefore = $(this).parents('.commentForm');
-        const htmlAfter = $(this).parents('.commentFrame');
-        htmlBefore.remove();
-        htmlAfter.append(template);
+      <textarea class="form-control updateContent" rows="4" placeholder="방명록을 작성하세요.">${content}</textarea>
+      <button type="button" class="btn btn-primary updateBtn" value="${id}">수정완료</button>
+      `;
+
+          $(this).closest('.commentFrame').prepend(template);
+          $(this).closest('.d-flex').siblings('.card-text').remove();
+          $(this).closest('.d-flex').remove();
+
+
       } else {
         alert('비밀번호가 틀렸습니다.');
       }
@@ -238,6 +279,67 @@
       alert('수정이 완료되었습니다.');
       location.reload();
     });
+
+
+    // 대댓글 생성
+    $('.commentFrame').on('click', ".reply", async function () {
+      const parentId = $(this).attr('value');
+      let template = `
+    <div class="comments m-4 p-4">
+      <h4>방명록</h4>
+      <h6 id="count" class="border-bottom my-3 py-2">
+        </h5>
+
+        <form class="my-4">
+          <textarea id="replyContent" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
+          <button id="replyBtn" type="button" class="btn btn-primary" value="${parentId}" style="float:right;
+            margin-top: 10px;
+            margin-bottom: 20px;" >방명록 작성</button>
+          <input id="relpyPassword" type="text" class="form-control" placeholder="password" aria-label="Server">
+          <input id="replyUsername" type="text" class="form-control" placeholder="Username" aria-label="Username">
+        </form>
+        <hr>
+        <div id="card">
+
+        </div>
+    </div>
+        `;
+      const replyHtml = $(this).parents('.commentForm');
+      replyHtml.append(template);
+    })
+
+    $('.commentForm').on('click', '#replyBtn', async function () {
+      let content = $('#replyContent').val();
+      let username = $('#replyUsername').val();
+      let password = $('#relpyPassword').val();
+      let parentId = $(this).attr('value');
+
+      if (!content | !username | !password) {
+        alert('모든 칸을 입력해 주세요');
+        return;
+      }
+
+      let now = new Date();
+      let year = now.getFullYear();
+      let month = now.getMonth();
+      let day = now.getDay();
+      let hour = now.getHours();
+      let minutes = now.getMinutes();
+      let second = now.getSeconds();
+
+      let createDate = `${year}년 ${month + 1}월 ${day > 10 ? day : '0' + day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}:${second > 10 ? second : '0' + second}`;
+
+      let comment = {
+        'content': content,
+        'username': username,
+        'password': password,
+        'create_date': createDate,
+        'parent_id': parentId,
+        'type': type,
+      };
+      await addDoc(commentsRef, comment);
+      window.location.reload();
+    })
 
   </script>
 
@@ -343,10 +445,11 @@
   </div>
 
   <div class="membersBtn">
-    <a type="button" class="btn btn-outline-secondary" href="inside.html">팀원 소개</a>
+    <a type="button" class="btn btn-outline-secondary insideBtn" href="inside.html">팀원 소개</a>
   </div>
 
   <!-- 방명록 -->
+
   <div class="comments m-4 p-4">
     <h4>방명록</h4>
     <h6 id="count" class="border-bottom my-3 py-2">
