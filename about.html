@@ -81,6 +81,9 @@
     h2:not(.introTitle) {
       text-align: center;
     }
+    .container {
+      width: 80%;
+    }
   </style>
 
   <script type="module">
@@ -109,8 +112,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const table = "about_comments";
-    const type = "about"; // 사용하는 페이지에 맞게 수정해 주세요
+    const table = "about_comments"; // 사용하는 페이지에 맞게 수정해 주세요
     let commentsRef = collection(db, table);
 
 
@@ -133,21 +135,20 @@
       let minutes = now.getMinutes();
       let second = now.getSeconds();
 
-      let createDate = `${year}년 ${month + 1}월 ${day > 10 ? day : '0' + day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}:${second > 10 ? second : '0' + second}`;
+      let createDate = `${year}년 ${month + 1}월 ${day >= 10 ? day : '0' + day}일 ${hour >= 10 ? hour : '0'+hour}:${minutes >= 10 ? minutes : '0' + minutes}:${second >= 10 ? second : '0' + second}`;
 
       let comment = {
         'content': content,
         'username': username,
         'password': password,
         'create_date': createDate,
-        'type': type,
       };
       await addDoc(commentsRef, comment);
       window.location.reload();
     })
 
     // 방명록 불러오기
-    let q = query(commentsRef, where("type", "==", type), orderBy('create_date'));
+    let q = query(commentsRef, orderBy('create_date'));
     let docs = await getDocs(q);
     let count = docs['_snapshot']['docChanges'].length;
     $('#count').append(`${count}개의 댓글이 있습니다.`);
@@ -335,7 +336,6 @@
         'password': password,
         'create_date': createDate,
         'parent_id': parentId,
-        'type': type,
       };
       await addDoc(commentsRef, comment);
       window.location.reload();
@@ -362,6 +362,7 @@
   </header>
 
   <!-- Masthead-->
+  <div class="container">
   <div class="teamTitle">
     <h1>코딩 아티스트 팀을 소개합니다</h1>
   </div>
@@ -466,6 +467,7 @@
 
       </div>
   </div>
+</div>
 
   <!-- Footer-->
   <footer class="footer py-4">
