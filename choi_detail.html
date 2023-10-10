@@ -41,7 +41,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
     
-        const table = "about_comments"; // 사용하는 페이지 테이블에 맞게 수정해주세요
+        const table = "choi_comments"; // 사용하는 페이지 테이블에 맞게 수정해주세요
         let commentsRef = collection(db, table);
     
     
@@ -91,8 +91,8 @@
           let id = doc.id;
     
           let temp_html = `
-          <div class="commentFrame">
-            <div class="commentForm">
+          <div class="commentFrame card my-4">
+            <div class="commentForm card-body">
             <div class="card-text">${content}</div>
                 <div class="d-flex justify-content-end">
                   <div class="badge bg-light text-dark p-2 text-start">
@@ -179,6 +179,27 @@
 </head>
 
 <style>
+    .comments input[type="text"] {
+        width: 200px;
+        margin-top: 10px;
+        float: right;
+    }
+
+    #createBtn {
+        float:right;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .contact {
+        margin-top: 100px;
+    }
+
+    .team-member {
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
     .container {
         width: 80%;
     }
@@ -223,9 +244,8 @@
                 </a>
 
                 <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
-                    <li><a href="about.html" class="nav-link px-2 link-dark">About</a></li>
-                    <li><a href="inside.html" class="nav-link px-2 link-dark">Inside</a></li>
-                    <li><a href="contact.html" class="nav-link px-2 link-dark">Contact</a></li>
+                    <li><a href="about.html" class="nav-link px-2 link-dark">About C.A.</a></li>
+                    <li><a href="inside.html" class="nav-link px-2 link-dark">Inside C.A.</a></li>
                 </ul>
             </div>
     </header>
@@ -321,26 +341,64 @@
                 </div>
             </div>
 
+            <hr class="featurette-divider">
+
+            <div class="comments">
+                <h4>방명록</h4>
+                <h6 class="border-bottom my-3 py-2" id="count">
+                    </h5>
+                    <form class="my-4">
+                        <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
+                        <button id="createBtn" type="button" class="btn btn-primary">방명록 작성</button>
+                        <input type="text" class="form-control" placeholder="password" aria-label="Server" id="password">
+                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" id="userName">
+                    </form>
+                    <hr>
+        
+                    <div id="card">
+         
+                    </div>
+            </div>
+
         </div>
 
     </main>
 
-    <div class="comments m-4 p-4">
-        <h4>방명록</h4>
-        <h6 class="border-bottom my-3 py-2" id="count">
-            </h5>
-            <div>
-                <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
-                <input type="text" class="form-control" placeholder="password" aria-label="Server" id="password">
-                <input type="text" class="form-control" placeholder="Username" aria-label="Username" id="userName">
-                <button id="createBtn" type="button" class="btn btn-primary">방명록 작성</button>
-            </div>
 
-            <div class="card my-4">
-                <div class="card-body" id="card">
-                </div>
+    <section class="contact page-section bg-light" id="team">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase p-5">Contact</h2>
             </div>
-    </div>
+            <hr>
+            <div class="row">
+                <div class="my-5 col-lg-4">
+                    <div class="team-member">
+                        <div class="mx-auto">
+                            <img class="mx-auto" src="img/email.png" alt="..." width="50px;">
+                            <h4>Email</h4>
+                            <a class="text-muted pt-3">chang4293@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-5 col-lg-4">
+                    <div class="team-member">
+                        <a href="https://www.instagram.com/changgyu4293/"><img class="mx-auto" src="img/instagram.png" alt="..." width="50px;"></a>
+                        <h4>Instagram</h4>
+                        <a class="text-muted pt-3" href="https://www.instagram.com/changgyu4293/"><i> @changgyu4293</i></a>
+                    </div>
+                </div>
+                <div class="my-5 col-lg-4">
+                    <div class="team-member">
+                        <a href="https://github.com/kyle4293"><img class="mx-auto" src="img/github.png" alt="..." width="50px;"></a>
+                        <h4>GitHub</h4>
+                        <a class="text-muted pt-3" href="https://github.com/kyle4293"><i>kyle4293</i></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <footer class="footer py-4">
         <div id="footer" class="container">
