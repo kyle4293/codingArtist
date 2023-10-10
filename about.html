@@ -88,8 +88,8 @@
     // Firebase SDK 라이브러리 가져오기
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    import { collection, addDoc, query, where, doc, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    import { getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { collection, query, doc, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getDocs, deleteDoc, getDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 
     // Firebase 구성 정보 설정
@@ -109,7 +109,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const table = "about_comments"; // 사용하는 페이지 테이블에 맞게 수정해주세요
+    const table = "about_comments"; // 사용하는 페이지 테이블에 맞게 수정해 주세요
     let commentsRef = collection(db, table);
 
 
@@ -118,10 +118,9 @@
       let content = $('#content').val();
       let username = $('#userName').val();
       let password = $('#password').val();
-      let id = self.crypto.randomUUID();
 
       if (!content | !username | !password) {
-        alert('공백이 존재하면 안됩니다.');
+        alert('모든 칸을 입력해 주세요');
         return;
       }
 
@@ -131,8 +130,9 @@
       let day = now.getDay();
       let hour = now.getHours();
       let minutes = now.getMinutes();
+      let second = now.getSeconds();
 
-      let createDate = `${year}년 ${month + 1}월 ${day > 10 ? day : '0' + day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}`;
+      let createDate = `${year}년 ${month + 1}월 ${day > 10 ? day : '0' + day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}:${second > 10 ? second : '0' + second}`;
 
       let comment = {
         'content': content,
@@ -140,12 +140,12 @@
         'password': password,
         'create_date': createDate,
       };
-      await setDoc(doc(commentsRef, id), comment);
+      await addDoc(commentsRef, comment);
       window.location.reload();
     })
 
     // 방명록 불러오기
-    let q = query(commentsRef, orderBy('create_date', 'desc'))
+    let q = query(commentsRef, orderBy('create_date'))
     let docs = await getDocs(q);
     let count = docs['_snapshot']['docChanges'].length;
     $('#count').append(`${count}개의 댓글이 있습니다.`);
@@ -181,29 +181,27 @@
     //방명록 삭제
     $('.delete').click(async function () {
       let id = $(this).attr("value");
-      let password = prompt('비밀번호를 입력해주세요');
+      let password = prompt('비밀번호를 입력해 주세요');
 
-      // id값으로 데이터 한 개만 가져오기
+      // id 값으로 데이터 한 개만 가져오기
       const commentRef = doc(db, table, id);
       const comment = await getDoc(commentRef);
       const realPassword = comment.data()['password'];
 
       if (realPassword == password) {
-        deleteDoc(commentRef);
-        setTimeout(function () { // 바로 reload하면 데이터 삭제가 이루어지지 않아서 지연 사용
-          alert('삭제 성공');
-          location.reload();
-        }, 200);
+        await deleteDoc(commentRef);
+        alert('삭제 성공');
+        location.reload();
       } else {
         alert('비밀번호가 틀렸습니다.');
       }
     })
 
 
-    // 데이터 수정
+    // 방명록 수정
     $('.update').click(async function () {
       let id = $(this).attr("value");
-      let password = prompt('비밀번호를 입력해주세요');
+      let password = prompt('비밀번호를 입력해 주세요');
 
       const commentRef = doc(db, table, id);
       const comment = await getDoc(commentRef);
@@ -229,7 +227,7 @@
       let id = $(this).attr('value');
 
       if (!content) {
-        alert('내용을 입력해주세요');
+        alert('내용을 입력해 주세요');
       }
 
       const commentRef = doc(db, table, id);
@@ -237,10 +235,8 @@
       await updateDoc(commentRef, {
         content: content,
       });
-      setTimeout(function () { // 바로 reload하면 데이터 수정이 이루어지지 않아서 지연 사용
-        alert('수정이 완료되었습니다.');
-        location.reload();
-      }, 200);
+      alert('수정이 완료되었습니다.');
+      location.reload();
     });
 
   </script>
