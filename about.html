@@ -109,13 +109,13 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const table = "comments";
+    const table = "about_comments";
     const type = "about"; // 사용하는 페이지에 맞게 수정해 주세요
     let commentsRef = collection(db, table);
 
 
     // 방명록 생성
-    $('#submit').click(async function () {
+    $('#createBtn').click(async function () {
       let content = $('#content').val();
       let username = $('#userName').val();
       let password = $('#password').val();
@@ -457,7 +457,7 @@
 
       <form class="my-4">
         <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
-        <button id="submit" type="button" class="btn btn-primary">방명록 작성</button>
+        <button id="createBtn" type="button" class="btn btn-primary" style="float:right; margin-top: 10px; margin-bottom: 20px;">방명록 작성</button>
         <input id="password" type="text" class="form-control" placeholder="password" aria-label="Server">
         <input id="userName" type="text" class="form-control" placeholder="Username" aria-label="Username">
       </form>
