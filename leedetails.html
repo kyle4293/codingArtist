@@ -13,45 +13,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <style>
-        .box {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .box>.btn {
-
-            margin-top: 10px;
-        }
-
-        .box>.form-control {
-            margin-right: 5px;
-        }
-
-        textarea {
-            height: 300px;
-
-        }
-
-        .pb-2 {
-            font-size: 50px;
-        }
-
-        .img-thumbnail_1 {
-            width: 180px;
-            height: 300px;
-        }
-
-        .img-thumbnail {
-            width: 376px;
-            height: 376px;
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script type="module">
+
         // Firebase SDK 라이브러리 가져오기
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -59,6 +24,7 @@
         import { getDocs, deleteDoc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 
+        // Firebase 구성 정보 설정
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyAvFpgx2vL0ivDQvrPrGwysXB4aWTXaPL0",
@@ -75,7 +41,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let aboutCommentsRef = collection(db, "guestbook");
+        const table = "lee_comments"; // 사용하는 페이지 테이블에 맞게 수정해주세요
+        let commentsRef = collection(db, table);
+
 
         // 방명록 생성
         $('#createBtn').click(async function () {
@@ -96,7 +64,7 @@
             let hour = now.getHours();
             let minutes = now.getMinutes();
 
-            let createDate = `${year}년 ${month + 1}월 ${day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}`;
+            let createDate = `${year}년 ${month + 1}월 ${day > 10 ? day : '0' + day}일 ${hour}:${minutes > 10 ? minutes : '0' + minutes}`;
 
             let comment = {
                 'content': content,
@@ -104,12 +72,12 @@
                 'password': password,
                 'create_date': createDate,
             };
-            await setDoc(doc(aboutCommentsRef, id), comment);
+            await setDoc(doc(commentsRef, id), comment);
             window.location.reload();
         })
 
         // 방명록 불러오기
-        let q = query(aboutCommentsRef, orderBy('create_date', 'desc'))
+        let q = query(commentsRef, orderBy('create_date', 'desc'))
         let docs = await getDocs(q);
         let count = docs['_snapshot']['docChanges'].length;
         $('#count').append(`${count}개의 댓글이 있습니다.`);
@@ -123,24 +91,23 @@
             let id = doc.id;
 
             let temp_html = `
-      <div class="commentFrame">
-        <div class="commentForm">
-        <div class="card-text">${content}</div>
-            <div class="d-flex justify-content-end">
-              <div class="badge bg-light text-dark p-2 text-start">
-                <div class="mb-2">${username}</div>
-                <div>${createDate}</div>
-                <div class="my-3">
-                  <a class="update btn btn-sm btn-outline-secondary" value="${id}">수정</a>
-                  <a class="delete btn btn-sm btn-outline-secondary" value="${id}"}>삭제</a>
-                </div>
+          <div class="commentFrame card my-4">
+            <div class="commentForm card-body">
+            <div class="card-text">${content}</div>
+                <div class="d-flex justify-content-end">
+                  <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">${username}</div>
+                    <div>${createDate}</div>
+                    <div class="my-3">
+                      <a class="update btn btn-sm btn-outline-secondary" value="${id}">수정</a>
+                      <a class="delete btn btn-sm btn-outline-secondary" value="${id}"}>삭제</a>
+                    </div>
+                  </div>
               </div>
-          </div>
-          </div>
-        </div>
-        <hr>
-      `;
-            $('#mycomment').append(temp_html);
+              </div>
+            </div>
+          `;
+            $('#card').append(temp_html);
         })
 
         //방명록 삭제
@@ -149,7 +116,7 @@
             let password = prompt('비밀번호를 입력해주세요');
 
             // id값으로 데이터 한 개만 가져오기
-            const commentRef = doc(db, "guestbook", id);
+            const commentRef = doc(db, table, id);
             const comment = await getDoc(commentRef);
             const realPassword = comment.data()['password'];
 
@@ -170,16 +137,16 @@
             let id = $(this).attr("value");
             let password = prompt('비밀번호를 입력해주세요');
 
-            const commentRef = doc(db, "guestbook", id);
+            const commentRef = doc(db, table, id);
             const comment = await getDoc(commentRef);
             const realPassword = comment.data()['password'];
             const content = comment.data()['content'];
 
             if (realPassword == password) {
                 let template = `
-        <textarea class="form-control updateContent" rows="4" placeholder="방명록을 작성하세요.">${content}</textarea>
-        <button type="button" class="btn btn-primary updateBtn" value="${id}">수정완료</button>
-        `;
+            <textarea class="form-control updateContent" rows="4" placeholder="방명록을 작성하세요.">${content}</textarea>
+            <button type="button" class="btn btn-primary updateBtn" value="${id}">수정완료</button>
+            `;
                 const htmlBefore = $(this).parents('.commentForm');
                 const htmlAfter = $(this).parents('.commentFrame');
                 htmlBefore.remove();
@@ -192,11 +159,12 @@
         $('.commentFrame').on('click', ".updateBtn", async function () {
             let content = $(this).prev().val();
             let id = $(this).attr('value');
-            const commentRef = doc(db, "guestbook", id);
 
             if (!content) {
                 alert('내용을 입력해주세요');
             }
+
+            const commentRef = doc(db, table, id);
 
             await updateDoc(commentRef, {
                 content: content,
@@ -210,8 +178,64 @@
     </script>
 </head>
 
+<style>
+    .comments input[type="text"] {
+        width: 200px;
+        margin-top: 10px;
+        float: right;
+    }
+
+    #createBtn {
+        float: right;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .contact {
+        margin-top: 100px;
+    }
+
+    .team-member {
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    .container {
+        width: 80%;
+    }
+
+    p {
+        font-size: 120%;
+    }
+
+    #intro li {
+        font-size: 150%;
+        font-weight: 600;
+        font-style: oblique;
+    }
+
+    .post {
+        margin: 20px 150px 10px auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mb-3 {
+        margin-left: 150px
+    }
+
+    .table-responsive {
+        margin: 50px 150px 30px 150px;
+    }
+
+    .featurette-divider {
+        margin: 100px 0;
+    }
+</style>
+
 <body>
-    <!-- 헤더 -->
     <header class="p-3 border-bottom">
         <div id="header" class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -220,25 +244,22 @@
                 </a>
 
                 <ul class="nav col-12 col-lg-auto ms-lg-auto justify-content-center mb-md-0">
-                    <li><a href="about.html" class="nav-link px-2 link-dark">About</a></li>
-                    <li><a href="inside.html" class="nav-link px-2 link-dark">Inside</a></li>
-                    <li><a href="contact.html" class="nav-link px-2 link-dark">Contact</a></li>
+                    <li><a href="about.html" class="nav-link px-2 link-dark">About C.A.</a></li>
+                    <li><a href="inside.html" class="nav-link px-2 link-dark">Inside C.A.</a></li>
                 </ul>
             </div>
     </header>
 
-    <!-- 메인 소개란 -->
-    <div class="container px-4 py-5">
+    <div class="container px-5 py-5">
         <h2 class="pb-2 border-bottom">아티스트 자세히 알아보기</h2>
 
-        <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+        <div id="intro" class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
             <div class="col d-flex flex-column align-items-start gap-2">
                 <h2 class="fw-bold text-body-emphasis">아티스트 : 이현구</h2>
-                <p class="text-body-secondary">안녕하세요 아티스트 이현구 라고 합니다. 제 TMI를 알려드릴게요! 더 궁금하신점이 있으시면 <a href="#tag0">방명록</a>을 남겨주세요!!</p>
+                <p class="text-body-secondary">안녕하세요 아티스트 이현구라고 합니다. 제 TMI를 알려드릴게요! 더 궁금하신점이 있으시면 <a
+                        href="#tag0">방명록</a>을 남겨주세요!</p>
+                <img src="img/이현구(2).jpg" class="img-thumbnail" alt="...">
 
-                <img src="img/이현구.jpg" class="img-thumbnail_1" alt="...">
-
-                <!-- <a href="#" class="btn btn-primary btn-lg">Primary button</a> -->
             </div>
 
             <div class="col">
@@ -250,7 +271,10 @@
                                 <use xlink:href="#collection"></use>
                             </svg>
                         </div>
+                        <br>
+                        <br><br><br><br><br>
                         <h4 class="fw-semibold mb-0 text-body-emphasis"><a href="#tag1">나의 최애곡</a></h4>
+                        <br>
                         <p class="text-body-secondary"></p>
                     </div>
 
@@ -261,7 +285,9 @@
                                 <use xlink:href="#gear-fill"></use>
                             </svg>
                         </div>
+                        <br>
                         <h4 class="fw-semibold mb-0 text-body-emphasis"><a href="#tag2">나의 인생영화</a></h4>
+                        <br>
                         <p class="text-body-secondary"></p>
                     </div>
 
@@ -272,7 +298,9 @@
                                 <use xlink:href="#speedometer"></use>
                             </svg>
                         </div>
+                        <br>
                         <h4 class="fw-semibold mb-0 text-body-emphasis"><a href="#tag3">나의 버킷리스트</a></h4>
+                        <br>
                         <p class="text-body-secondary"></p>
                     </div>
 
@@ -283,15 +311,12 @@
                                 <use xlink:href="#table"></use>
                             </svg>
                         </div>
-                        <!-- <h4 class="fw-semibold mb-0 text-body-emphasis">Featured title</h4>
-                        <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 주제 1,2,3 -->
     <main>
         <div class="container marketing">
             <hr class="featurette-divider">
@@ -300,33 +325,37 @@
                 <div class="col-md-7">
                     <h2 class="featurette-heading fw-normal lh-1"><a name="tag1">Lenka - Skipalong</a> <span
                             class="text-body-secondary"></span></h2>
-                    <p class="lead"><br>저의 최애곡은 Lenka의 skipalong 이라는 노래입니다. 다소 생소하실분들이 많을 것 같은데요 
-                                        Lenka의 The show를 들으시면 아 이가수구나!하고 아실거에요!<br> 
-                                    <br>이 노래를 좋아해서 온라인 닉네임도 skipalong으로 하고 있답니다.    
-                                    <br>이 노래는 걱정하지마 넌 잘 해낼거야 라는내용의  힘들 때 위로받을 수 있는 노래입니다.<br><br>
-                                        제가 힘이 들때 항상 들으면서 힘을 내는 노래랍니다. 여러분들도 힘들때 이 노래를 들으면서 같이 힘을 냈으면 
-                                        좋겠습니다!! 여러분들의 최애곡도 공유해주세요!!.  
-                                </p>
+                    <p class="lead">
+                    <p><br>저의 최애곡은 Lenka의 skipalong 이라는 노래입니다. 다소 생소하실분들이 많을 것 같은데요
+                        Lenka의 The show를 들으시면 아 이가수구나!하고 아실거에요!<br>
+                        <br>이 노래를 좋아해서 온라인 닉네임도 skipalong으로 하고 있답니다.
+                        <br>이 노래는 걱정하지마 넌 잘 해낼거야 라는내용의 힘들 때 위로받을 수 있는 노래입니다.<br><br>
+                        제가 힘이 들때 항상 들으면서 힘을 내는 노래랍니다. 여러분들도 힘들때 이 노래를 들으면서 같이 힘을 냈으면
+                        좋겠습니다!! 여러분들의 최애곡도 공유해주세요!.
+                    </p>
                 </div>
                 <div class="col-md-5">
                     <img src="img/Lenka.jpeg" class="img-thumbnail" alt="...">
                 </div>
             </div>
 
+
             <hr class="featurette-divider">
+
             <div class="row featurette">
                 <div class="col-md-7 order-md-2">
                     <h2 class="featurette-heading fw-normal lh-1"><a name="tag2">HarryPotter Series</a> <span
                             class="text-body-secondary"></span></h2>
-                    <p class="lead"><br>저의 인생영화는 해리포터시리즈 입니다. 제 인생영화이자 태어나서 처음 본 영화가 바로 해리포터와 마법사의 돌입니다. 
-                                    처음 본 순간부터 끌렸나봅니다 하하.<br> <br>
-                                    어린시절 해리포터에 빠지게된 이후로 성인이 된 지금도 가끔씩 책과 영화를 보곤하면 예전생각도 나고 어린시절로 돌아간것만 같아서 
-                                    다른 좋은 영화들도 많이 보았지만 제 인생영화로 뽑게 되었습니다. <br><br>
-                                    여러분들의 인생영화는 무엇인가요?  
+                    <p class="lead"><br>저의 인생영화는 해리포터시리즈 입니다. 제 인생영화이자 태어나서 처음 본 영화가 바로 해리포터와 마법사의 돌입니다.
+                        처음 본 순간부터 끌렸나봅니다 하하.<br> <br>
+                        어린시절 해리포터에 빠지게된 이후로 성인이 된 지금도 가끔씩 책과 영화를 보곤하면 예전생각도 나고 어린시절로 돌아간것만 같아서
+                        다른 좋은 영화들도 많이 보았지만 제 인생영화로 뽑게 되었습니다. <br><br>
+                        여러분들의 인생영화는 무엇인가요?
                     </p>
                 </div>
-                <div class="col-md-5 order-md-1">
+                <div class="col-md-5">
                     <img src="img/HarryPotter.jpeg" class="img-thumbnail" alt="...">
+
                 </div>
             </div>
 
@@ -338,49 +367,44 @@
                     <p class="lead"><br>저의 버킷리스트는 오로라 직접 보기 입니다. 어릴적부터 TV에 나오는 오로라를 보고 무척 신기해했던 경험이 많은데요
                                         그 때마다 저걸 실제로 보면 얼마나 아름다울까 생각하곤 했답니다.<br><br>
                                         추운 겨울에 오두막집에서 커피 한잔과 함께 장작불을 쐬며 마법과도 같은 오로라를 감상하는게 저의 버킷리스트랍니다.<br><br>
-                                        여러분을의 버킷리스트는 무엇인가요? 여러분의 이야기를 <a href="#tag0">방명록</a>에 공유해주세요!</p>
+                                        여러분을의 버킷리스트는 무엇인가요? </p>
                 </div>
                 <div class="col-md-5">
                     <img src="img/Aurora.jpeg" class="img-thumbnail" alt="...">
+
                 </div>
             </div>
+
+            <hr class="featurette-divider">
+
+            <div class="comments">
+                <h4 ><a name="tag0">방명록</a></h4>
+                <h6 class="border-bottom my-3 py-2" id="count">
+                    </h5>
+                    <form class="my-4">
+                        <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
+                        <button id="createBtn" type="button" class="btn btn-primary">방명록 작성</button>
+                        <input type="text" class="form-control" placeholder="password" aria-label="Server"
+                            id="password">
+                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                            id="userName">
+                    </form>
+                    <hr>
+
+                    <div id="card">
+
+                    </div>
+            </div>
+
         </div>
 
     </main>
 
 
-
-
-
-
-    <!-- Comments-->
-    <!-- 댓글 -->
-    <div class="comments m-4 p-4">
-
-        <h4 id="cnt" ><a name="tag0">방명록</a></h4>
-
-        <form class="my-4">
-            <textarea id="content" class="form-control" rows="4" placeholder="방명록을 작성하세요."></textarea>
-            <div class="box">
-                <input type="text" class="form-control" placeholder="Username" aria-label="Username" id="userName">
-                <input type="text" class="form-control" placeholder="password" aria-label="Server" id="password">
-                <button id="createBtn" type="button" class="btn btn-primary">방명록 작성</button>
-            </div>
-        </form>
-        <hr>
-        <div class="card my-4">
-            <div class="card-body" id="mycomment">
-
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Contact -->
-    <section class="page-section bg-light" id="team">
+    <section class="contact page-section bg-light" id="team">
         <div class="container">
             <div class="text-center">
-                <h2 class="section-heading text-uppercase">Contact</h2>
+                <h2 class="section-heading text-uppercase p-5">Contact</h2>
             </div>
             <hr>
             <div class="row">
@@ -404,7 +428,7 @@
                 </div>
                 <div class="my-5 col-lg-4">
                     <div class="team-member">
-                        <a href="https://github.com/kyle4293"><img class="mx-auto" src="img/github.png" alt="..."
+                        <a href="https://github.com/Sk1palong"><img class="mx-auto" src="img/github.png" alt="..."
                                 width="50px;"></a>
                         <h4>GitHub</h4>
                         <a class="text-muted pt-3" href="https://github.com/Sk1palong"><i>Sk1palong</i></a>
@@ -412,16 +436,9 @@
                 </div>
 
             </div>
-            <div class="my-5 row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <p class="large text-muted"></p>
-                </div>
-            </div>
         </div>
     </section>
 
-
-    <!-- Footer-->
     <footer class="footer py-4">
         <div id="footer" class="container">
             <div class="row align-items-center">
